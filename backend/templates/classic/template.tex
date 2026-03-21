@@ -1,0 +1,148 @@
+%-------------------------
+% Classic Resume Template - Traditional serif academic style
+%-------------------------
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{charter}
+\usepackage{geometry}
+
+\geometry{left=0.75in, right=0.75in, top=0.6in, bottom=0.6in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Section formatting - classic underline style
+\titleformat{\section}{
+  \vspace{-4pt}\raggedright\large\bfseries
+}{}{0em}{}[\titlerule \vspace{-5pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-2pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small#4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.2in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\LARGE\bfseries <<name>>} \\[4pt]
+    \small
+    <<location>>
+    <% if location %> $\cdot$ <% endif %>
+    <<phone>> $\cdot$
+    \href{mailto:<<email>>}{<<email>>}
+    <% if linkedin %> $\cdot$ \href{<<linkedin>>}{LinkedIn}<% endif %>
+    <% if github %> $\cdot$ \href{<<github>>}{GitHub}<% endif %>
+    <% if website %> $\cdot$ \href{<<website>>}{<<website>>}<% endif %>
+\end{center}
+
+<% if summary %>
+\section{Summary}
+  \small{<<summary>>}
+  \vspace{-2pt}
+<% endif %>
+
+<% if education %>
+\section{Education}
+  \resumeSubHeadingListStart
+<% for edu in education %>
+    \resumeSubheading
+      {<<edu.institution>>}{<<edu.location>>}
+      {<<edu.degree>> in <<edu.field>><% if edu.gpa %> --- GPA: <<edu.gpa>><% endif %>}{<<edu.graduation_date>>}
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if experience %>
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+<% for exp in experience %>
+    \resumeSubheading
+      {<<exp.position>>}{<<exp.start_date>> -- <<exp.end_date>>}
+      {<<exp.company>>}{<<exp.location>>}
+      \resumeItemListStart
+<% for bullet in exp.bullets %>
+        \resumeItem{<<bullet>>}
+<% endfor %>
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if projects %>
+\section{Selected Projects}
+  \resumeSubHeadingListStart
+<% for project in projects %>
+    \resumeProjectHeading
+      {\textbf{<<project.name>>} $|$ \emph{\small <<project.technologies|join(', ')>>}}{}
+      \resumeItemListStart
+        \resumeItem{<<project.description>>}
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if has_skills %>
+\section{Technical Proficiencies}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+<% if skills.technical %>
+     \textbf{Programming Languages:} <<skills.technical|join(', ')>> \\
+<% endif %>
+<% if skills.frameworks %>
+     \textbf{Frameworks \& Libraries:} <<skills.frameworks|join(', ')>> \\
+<% endif %>
+<% if skills.tools %>
+     \textbf{Tools \& Platforms:} <<skills.tools|join(', ')>> \\
+<% endif %>
+<% if skills.languages %>
+     \textbf{Languages:} <<skills.languages|join(', ')>>
+<% endif %>
+    }}
+ \end{itemize}
+<% endif %>
+
+<% if certifications %>
+\section{Certifications \& Awards}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+<% for cert in certifications %>
+     \textbf{<<cert.name>>}, <<cert.issuer>> (<<cert.date>>)<% if not loop.last %> \\<% endif %>
+<% endfor %>
+    }}
+ \end{itemize}
+<% endif %>
+
+\end{document}

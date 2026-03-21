@@ -1,0 +1,196 @@
+%-------------------------
+% Deedy-inspired Resume Template - Preview
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{enumitem}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{titlesec}
+\usepackage{fontenc}
+\usepackage{lmodern}
+\usepackage{tabularx}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\usepackage[left=0.4in,right=0.4in,top=0.3in,bottom=0.3in]{geometry}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+
+% Colors
+\definecolor{primary}{HTML}{2b2b2b}
+\definecolor{headings}{HTML}{6A6A6A}
+\definecolor{subheadings}{HTML}{333333}
+\definecolor{date}{HTML}{666666}
+
+% Name formatting
+\newcommand{\namesection}[3]{
+  \centering{
+    \fontsize{30pt}{40pt}\selectfont
+    \textbf{#1 #2}
+  }\\[4pt]
+  \centering{
+    \color{headings}
+    \fontsize{10pt}{14pt}\selectfont
+    #3
+  }\\[4pt]
+  \noindent{\color{headings}\rule{\textwidth}{0.4pt}}
+  \vspace{-10pt}
+}
+
+% Section formatting
+\titleformat{\section}{
+  \color{headings}\scshape\fontsize{14pt}{18pt}\selectfont\raggedright\uppercase
+}{}{0em}{}
+
+% Subsection formatting
+\titleformat{\subsection}{
+  \color{subheadings}\fontsize{11pt}{13pt}\selectfont\bfseries\uppercase
+}{}{0em}{}
+
+\titlespacing{\section}{0pt}{6pt}{4pt}
+\titlespacing{\subsection}{0pt}{4pt}{2pt}
+
+% Run subsection (inline title for experience)
+\newcommand{\runsubsection}[1]{
+  \color{subheadings}\fontsize{11pt}{13pt}\selectfont\bfseries\uppercase{#1}\normalfont
+}
+
+% Descriptor (pipe + role name)
+\newcommand{\descript}[1]{
+  \color{subheadings}\raggedright\scshape\fontsize{10pt}{12pt}\selectfont{#1\\}\normalfont
+}
+
+% Location formatting
+\newcommand{\location}[1]{
+  \color{headings}\raggedright\fontsize{9pt}{11pt}\selectfont{#1\\}\normalfont
+}
+
+% Tight item list
+\newenvironment{tightitemize}{
+  \vspace{2pt}\begin{itemize}[leftmargin=12pt]\itemsep1pt \parskip0pt \parsep0pt
+}{
+  \end{itemize}\vspace{-\topsep}
+}
+
+% Section space
+\newcommand{\sectionsep}{\vspace{6pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\namesection{Alex Johnson}{}{
+\href{mailto:alex.johnson@email.com}{alex.johnson@email.com} | (555) 123-4567 | San Francisco, CA | \href{https://linkedin.com/in/alexjohnson}{LinkedIn} | \href{https://github.com/alexjohnson}{GitHub}
+}
+
+%----------------------------------------------------------------------------------------
+%	LEFT COLUMN
+%----------------------------------------------------------------------------------------
+\begin{minipage}[t]{0.30\textwidth}
+
+%------------------------------------------------
+% Education
+%------------------------------------------------
+\section{Education}
+
+\subsection{UC Berkeley}
+\descript{BS in Computer Science}
+\location{2019-05}
+\location{Berkeley, CA}
+GPA: 3.7
+
+\sectionsep
+
+%------------------------------------------------
+% Skills
+%------------------------------------------------
+\section{Skills}
+
+\subsection{Programming}
+\location{Python \textbullet{} TypeScript \textbullet{} Go \textbullet{} Java \textbullet{} SQL}
+\sectionsep
+
+\subsection{Frameworks}
+\location{React \textbullet{} Next.js \textbullet{} FastAPI \textbullet{} Django \textbullet{} Express}
+\sectionsep
+
+\subsection{Tools}
+\location{Docker \textbullet{} Kubernetes \textbullet{} AWS \textbullet{} PostgreSQL \textbullet{} Redis \textbullet{} Git}
+\sectionsep
+
+\subsection{Languages}
+\location{English (Native) \textbullet{} Spanish (Conversational)}
+\sectionsep
+
+%------------------------------------------------
+% Links
+%------------------------------------------------
+\section{Links}
+LinkedIn: \href{https://linkedin.com/in/alexjohnson}{linkedin.com/in/alexjohnson} \\
+GitHub: \href{https://github.com/alexjohnson}{github.com/alexjohnson} \\
+
+\end{minipage}
+\hfill
+%
+%----------------------------------------------------------------------------------------
+%	RIGHT COLUMN
+%----------------------------------------------------------------------------------------
+%
+\begin{minipage}[t]{0.66\textwidth}
+
+%----------SUMMARY----------
+\section{Summary}
+\small{Full-stack software engineer with 5+ years of experience building scalable web applications. Passionate about clean architecture, developer experience, and shipping products that users love.}
+\sectionsep
+
+%------------------------------------------------
+% Experience
+%------------------------------------------------
+\section{Experience}
+
+\runsubsection{TechCorp Inc.}
+\descript{| Senior Software Engineer}
+\location{2022-03 -- Present | San Francisco, CA}
+\begin{tightitemize}
+\item Led migration of monolithic Rails app to microservices architecture, reducing deploy times by 75\% and improving system reliability to 99.95\% uptime
+\item Designed and implemented real-time data pipeline processing 2M+ events/day using Kafka and Python, enabling instant analytics for 50K users
+\item Mentored 4 junior engineers through code reviews and pair programming, improving team velocity by 30\%
+\end{tightitemize}
+\sectionsep
+
+\runsubsection{StartupXYZ}
+\descript{| Software Engineer}
+\location{2019-06 -- 2022-02 | Remote}
+\begin{tightitemize}
+\item Built React frontend serving 100K+ monthly active users with sub-200ms page loads using code splitting and SSR
+\item Developed RESTful API layer in Node.js handling 10K requests/minute with comprehensive test coverage (95\%)
+\item Implemented CI/CD pipeline with GitHub Actions, reducing release cycle from 2 weeks to daily deploys
+\end{tightitemize}
+\sectionsep
+
+%------------------------------------------------
+% Projects
+%------------------------------------------------
+\section{Projects}
+
+\runsubsection{DevMetrics Dashboard}
+\descript{| React, Go, PostgreSQL, WebSocket}
+\begin{tightitemize}
+\item Open-source developer productivity dashboard aggregating GitHub, Jira, and CI/CD metrics with real-time WebSocket updates. 500+ GitHub stars.
+\end{tightitemize}
+\sectionsep
+
+\end{minipage}
+
+\end{document}

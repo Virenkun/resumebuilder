@@ -1,0 +1,239 @@
+%-------------------------
+% Deedy-inspired Resume Template (adapted for Jinja2 + pdflatex)
+% Two-column layout: left sidebar (33%) + right content (66%)
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{enumitem}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage{titlesec}
+\usepackage{fontenc}
+\usepackage{lmodern}
+\usepackage{tabularx}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\usepackage[left=0.4in,right=0.4in,top=0.3in,bottom=0.3in]{geometry}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+
+% Colors
+\definecolor{primary}{HTML}{2b2b2b}
+\definecolor{headings}{HTML}{6A6A6A}
+\definecolor{subheadings}{HTML}{333333}
+\definecolor{date}{HTML}{666666}
+
+% Name formatting
+\newcommand{\namesection}[3]{
+  \centering{
+    \fontsize{30pt}{40pt}\selectfont
+    \textbf{#1 #2}
+  }\\[4pt]
+  \centering{
+    \color{headings}
+    \fontsize{10pt}{14pt}\selectfont
+    #3
+  }\\[4pt]
+  \noindent{\color{headings}\rule{\textwidth}{0.4pt}}
+  \vspace{-10pt}
+}
+
+% Section formatting
+\titleformat{\section}{
+  \color{headings}\scshape\fontsize{14pt}{18pt}\selectfont\raggedright\uppercase
+}{}{0em}{}
+
+% Subsection formatting
+\titleformat{\subsection}{
+  \color{subheadings}\fontsize{11pt}{13pt}\selectfont\bfseries\uppercase
+}{}{0em}{}
+
+\titlespacing{\section}{0pt}{6pt}{4pt}
+\titlespacing{\subsection}{0pt}{4pt}{2pt}
+
+% Run subsection (inline title for experience)
+\newcommand{\runsubsection}[1]{
+  \color{subheadings}\fontsize{11pt}{13pt}\selectfont\bfseries\uppercase{#1}\normalfont
+}
+
+% Descriptor (pipe + role name)
+\newcommand{\descript}[1]{
+  \color{subheadings}\raggedright\scshape\fontsize{10pt}{12pt}\selectfont{#1\\}\normalfont
+}
+
+% Location formatting
+\newcommand{\location}[1]{
+  \color{headings}\raggedright\fontsize{9pt}{11pt}\selectfont{#1\\}\normalfont
+}
+
+% Tight item list
+\newenvironment{tightitemize}{
+  \vspace{2pt}\begin{itemize}[leftmargin=12pt]\itemsep1pt \parskip0pt \parsep0pt
+}{
+  \end{itemize}\vspace{-\topsep}
+}
+
+% Section space
+\newcommand{\sectionsep}{\vspace{6pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\namesection{<<name>>}{}{
+\href{mailto:<<email>>}{<<email>>}<% if phone %> | <<phone>><% endif %><% if location %> | <<location>><% endif %><% if linkedin %> | \href{<<linkedin>>}{LinkedIn}<% endif %><% if github %> | \href{<<github>>}{GitHub}<% endif %><% if website %> | \href{<<website>>}{<<website>>}<% endif %>
+}
+
+%----------------------------------------------------------------------------------------
+%	LEFT COLUMN
+%----------------------------------------------------------------------------------------
+\begin{minipage}[t]{0.30\textwidth}
+
+%------------------------------------------------
+% Education
+%------------------------------------------------
+<% if education %>
+\section{Education}
+
+<% for edu in education %>
+\subsection{<<edu.institution>>}
+\descript{<<edu.degree>> in <<edu.field>>}
+\location{<<edu.graduation_date>>}<% if edu.location %>
+\location{<<edu.location>>}<% endif %><% if edu.gpa %>
+GPA: <<edu.gpa>><% endif %>
+
+\sectionsep
+<% endfor %>
+<% endif %>
+
+%------------------------------------------------
+% Skills
+%------------------------------------------------
+<% if has_skills %>
+\section{Skills}
+
+<% if skills.technical %>
+\subsection{Programming}
+\location{<<skills.technical|join(' \\textbullet{} ')>>}
+\sectionsep
+<% endif %>
+
+<% if skills.frameworks %>
+\subsection{Frameworks}
+\location{<<skills.frameworks|join(' \\textbullet{} ')>>}
+\sectionsep
+<% endif %>
+
+<% if skills.tools %>
+\subsection{Tools}
+\location{<<skills.tools|join(' \\textbullet{} ')>>}
+\sectionsep
+<% endif %>
+
+<% if skills.languages %>
+\subsection{Languages}
+\location{<<skills.languages|join(' \\textbullet{} ')>>}
+\sectionsep
+<% endif %>
+<% endif %>
+
+%------------------------------------------------
+% Certifications
+%------------------------------------------------
+<% if certifications %>
+\section{Certifications}
+
+<% for cert in certifications %>
+\subsection{<<cert.name>>}
+\descript{<<cert.issuer>>}
+\location{<<cert.date>>}
+\sectionsep
+<% endfor %>
+<% endif %>
+
+%------------------------------------------------
+% Links
+%------------------------------------------------
+<% if linkedin or github or website %>
+\section{Links}
+<% if linkedin %>
+LinkedIn: \href{<<linkedin>>}{<<linkedin>>} \\
+<% endif %>
+<% if github %>
+GitHub: \href{<<github>>}{<<github>>} \\
+<% endif %>
+<% if website %>
+Website: \href{<<website>>}{<<website>>} \\
+<% endif %>
+<% endif %>
+
+\end{minipage}
+\hfill
+%
+%----------------------------------------------------------------------------------------
+%	RIGHT COLUMN
+%----------------------------------------------------------------------------------------
+%
+\begin{minipage}[t]{0.66\textwidth}
+
+<% if summary %>
+%----------SUMMARY----------
+\section{Summary}
+\small{<<summary>>}
+\sectionsep
+<% endif %>
+
+%------------------------------------------------
+% Experience
+%------------------------------------------------
+<% if experience %>
+\section{Experience}
+
+<% for exp in experience %>
+\runsubsection{<<exp.company>>}
+\descript{| <<exp.position>>}
+\location{<<exp.start_date>> -- <<exp.end_date>> | <<exp.location>>}
+\begin{tightitemize}
+<% for bullet in exp.bullets %>
+\item <<bullet>>
+<% endfor %>
+\end{tightitemize}
+\sectionsep
+<% endfor %>
+<% endif %>
+
+%------------------------------------------------
+% Projects
+%------------------------------------------------
+<% if projects %>
+\section{Projects}
+
+<% for project in projects %>
+\runsubsection{<<project.name>>}
+<% if project.technologies %>
+\descript{| <<project.technologies|join(', ')>>}
+<% endif %>
+<% if project.link %>
+\location{\href{<<project.link>>}{<<project.link>>}}
+<% endif %>
+\begin{tightitemize}
+\item <<project.description>>
+\end{tightitemize}
+\sectionsep
+<% endfor %>
+<% endif %>
+
+\end{minipage}
+
+\end{document}

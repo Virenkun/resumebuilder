@@ -1,0 +1,240 @@
+{
+  "id": "83543d07-6e1b-41aa-9e4f-d9f2d6bebb2e",
+  "personal": {
+    "name": "Virendra Soni",
+    "email": "virendrasonivs07@gmail.com",
+    "phone": "+91-7408070150",
+    "location": "Hyderabad, Telangana",
+    "linkedin": "linkedin.com/in/virensoni-iith/",
+    "github": "Portfolio",
+    "website": null
+  },
+  "summary": "Engineered scalable, production-grade web applications using React, Node.js, Spring Boot, and cloud-native microservices over 2+ years, delivering end-to-end systems that improved performance, resilience, and user experience across agile, cross-functional teams.",
+  "experience": [
+    {
+      "id": "exp-1",
+      "company": "Arnsoft Technologies Pvt. Ltd.",
+      "position": "Software Developer",
+      "location": "Hyderabad, Telangana",
+      "start_date": "2025-05",
+      "end_date": "Present",
+      "bullets": [
+        "Architected and trained a prototype LLM from scratch using transformer-based architecture, applying custom tokenization and fine-tuning strategies that informed the design of production-grade retrieval-augmented generationx pipelines.",
+        "Developed scalable integrations and client-facing utilities using Node.js and Python, improving system interoperability and laying a foundation for enterprise-grade AI-driven search applications; implemented frontend with Next.js and managed complete DevOps lifecycle via CI/CD pipelines.",
+        "Designed and deployed PoC modules integrating vector databases (Pinecone/FAISS) with LLM-powered retrieval workflows, achieving a 40% improvement in query relevance and reducing response latency to sub-200ms p95 benchmarks.",
+        "Built AI-powered calling agent applications using Next.js (frontend) and Node.js/NestJS (backend) integrated with REST and GraphQL APIs, enabling real-time dashboards serving 100+ concurrent users."
+      ],
+      "keywords": [
+        "React JS",
+        "TypeScript",
+        "RAG",
+        "VectorDB",
+        "NoSQL",
+        "CI/CD",
+        "LLMs",
+        "Vector Search"
+      ]
+    },
+    {
+      "id": "exp-2",
+      "company": "Rapidue Technologies Pvt. Ltd.",
+      "position": "Software Developer",
+      "location": "Hyderabad, Telangana",
+      "start_date": "2024-02",
+      "end_date": "2025-04",
+      "bullets": [
+        "Designed and implemented over 20+ RESTful APIs using Spring Boot and MySQL within a new microservices architecture, improving code modularity and reducing development time for subsequent features.",
+        "Built dynamic, responsive UI components using React.js, Tailwind CSS, and MUI, reducing page load time by 35% and improving user experience.",
+        "Boosted user engagement and decision-making for over 400+ users by integrating Nivo charts for real-time, interactive data visualization."
+      ],
+      "keywords": [
+        "React JS",
+        "TypeScript",
+        "JavaScript",
+        "MUI",
+        "Tailwind",
+        "NoSQL",
+        "RDBMS",
+        "REST APIs",
+        "JWT"
+      ]
+    },
+    {
+      "id": "exp-3",
+      "company": "Suzuki Innovation Centre",
+      "position": "Software Developer",
+      "location": "Hyderabad, Telangana",
+      "start_date": "2023-07",
+      "end_date": "2024-01",
+      "bullets": [
+        "Engineered and deployed full-stack web applications using Node.js, React, TypeScript, JavaScript, and Next.js, adhering to agile development practices and ensuring modular, scalable architecture.",
+        "Successfully deployed 4 production-grade applications on AWS (EC2, S3, Route 53, RDS), optimizing scalability and resilience; improved system throughput by 30% under high-load scenarios with zero downtime.",
+        "Implemented modern DevOps workflows with Docker, GitHub Actions (CI/CD), and version control using Git/GitHub, reducing deployment errors and enabling rapid feature rollouts."
+      ],
+      "keywords": [
+        "React",
+        "Next.js",
+        "Express.js",
+        "AWS",
+        "Node.js",
+        "TypeScript",
+        "Microservice Architecture"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-1",
+      "institution": "IIT Hyderabad",
+      "degree": "Bachelor of Technology",
+      "field": "",
+      "location": "Hyderabad, Telangana",
+      "graduation_date": "2024-04",
+      "gpa": null,
+      "relevant_coursework": []
+    }
+  ],
+  "skills": {
+    "technical": [
+      "JavaScript",
+      "TypeScript",
+      "C/C++",
+      "Go",
+      "Python",
+      "Java",
+      "SQL",
+      "HTML/CSS",
+      "RESTful APIs",
+      "GraphQL",
+      "Microservices",
+      "MVC",
+      "Event-Driven Architecture",
+      "Design Patterns",
+      "Agile/Scrum",
+      "JWT Auth",
+      "Socket.IO",
+      "WebSockets",
+      "OpenAI APIs",
+      "Prompt Engineering",
+      "RAG",
+      "Groq Cloud",
+      "Real-time TTS/STT"
+    ],
+    "languages": [
+      "JavaScript",
+      "TypeScript",
+      "C/C++",
+      "Go",
+      "Python",
+      "Java",
+      "SQL",
+      "HTML/CSS"
+    ],
+    "frameworks": [
+      "React.js",
+      "Next.js",
+      "Redux",
+      "Express.js",
+      "NestJS",
+      "Node.js",
+      "Spring Boot",
+      "Tailwind CSS",
+      "Material UI",
+      "Bootstrap",
+      "React Query",
+      "React Native"
+    ],
+    "tools": [
+      "AWS (EC2, S3, RDS)",
+      "Microsoft Azure",
+      "Docker",
+      "GitHub Actions",
+      "CI/CD",
+      "Git",
+      "Linux",
+      "Netlify",
+      "Heroku",
+      "Render",
+      "MySQL",
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "Prisma ORM",
+      "Kafka",
+      "Supabase",
+      "Pinecone",
+      "FAISS"
+    ]
+  },
+  "projects": [
+    {
+      "id": "proj-1",
+      "name": "Euphonia: An AI Powered Therapist",
+      "description": "Built Euphonia, a real-time AI therapist app that delivers voice and chat-based mental health support using LLMs. Integrated speech-to-text and text-to-speech systems for seamless two-way voice interaction, leveraging Groq Cloud, LLMs, and Supabase. Engineered full-stack architecture using Next.js, TypeScript, and Radix UI, with real-time chat and user auth powered by Supabase.",
+      "technologies": [
+        "Next.js",
+        "Supabase",
+        "LLM",
+        "AI",
+        "AWS",
+        "Groq Cloud",
+        "Radix UI",
+        "TypeScript",
+        "MS Azure"
+      ],
+      "link": null
+    },
+    {
+      "id": "proj-2",
+      "name": "Engager AI (SaaS)",
+      "description": "Built a SaaS platform for businesses to integrate AI-driven chatbots by embedding a simple dashboard-generated script, supporting bot training and CRM lead collection. Designed secure backend authentication and real-time chat using Supabase, JWT, and Socket.IO. Led the design of prompt workflows for LLM-powered replies and fallback-to-human flows using OpenAI, hosted on Microsoft Azure. Deployed production infrastructure with Next.js, React.js, and PostgreSQL, enabling live usage by multiple customers.",
+      "technologies": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "LLM",
+        "AI (OpenAI)",
+        "Microsoft Azure",
+        "Socket.IO"
+      ],
+      "link": null
+    },
+    {
+      "id": "proj-3",
+      "name": "Triggly: An AI Powered Social Media Automation SaaS",
+      "description": "Developed a platform to automate replies to social media comments and messages using LLMs, significantly reducing manual workload for users. Built and secured backend services with Express.js, JWT, and PostgreSQL via Prisma ORM, including a custom analytics dashboard. Implemented email delivery reports and message metrics to aid in content performance tracking. Optimized frontend UX using React.js and Next.js with lazy loading and dynamic imports.",
+      "technologies": [
+        "Next.js",
+        "PostgreSQL",
+        "Prisma",
+        "TypeScript",
+        "Node.js",
+        "Express.js"
+      ],
+      "link": null
+    },
+    {
+      "id": "proj-4",
+      "name": "Platora AI: Smart Nutrition & Calorie Tracking Platform",
+      "description": "Built a cross-platform mobile application for AI-powered calorie tracking and nutrition insights using React Native, Go Lang and SQL. Designed and implemented a high-performance backend using Golang, handling user data, food logs, and AI-driven recommendations. Integrated LLM-based food analysis to provide intelligent calorie estimation and personalized meal insights. Implemented AWS-based push notifications for meal reminders, streak tracking, and engagement workflows. Configured DevOps pipelines for automated builds, deployments, and environment management.",
+      "technologies": [
+        "React Native",
+        "Golang",
+        "SQL",
+        "AWS",
+        "LLMs",
+        "Push Notifications",
+        "DevOps"
+      ],
+      "link": null
+    }
+  ],
+  "certifications": [],
+  "metadata": {
+    "template": "jakes_resume",
+    "last_modified": null,
+    "target_jd": null,
+    "ats_score": null
+  }
+}

@@ -1,0 +1,155 @@
+%-------------------------
+% Minimal Resume Template - Ultra clean, generous whitespace
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+
+\geometry{left=0.8in, right=0.8in, top=0.7in, bottom=0.7in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{heading}{rgb}{0.1, 0.1, 0.1}
+\definecolor{body}{rgb}{0.27, 0.27, 0.27}
+\definecolor{subtle}{rgb}{0.53, 0.53, 0.53}
+
+% Section formatting - minimal thin rule
+\newcommand{\sectiontitle}[1]{\MakeUppercase{#1}}
+\titleformat{\section}{
+  \vspace{-2pt}\color{heading}\raggedright\normalsize\bfseries
+}{}{0em}{\MakeUppercase}[\vspace{-4pt}{\color{subtle}\rule{\textwidth}{0.3pt}} \vspace{-4pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{\color{body}{#1}\vspace{-1pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{heading}\small#1} & \small\color{subtle}#2 \\
+      {\small\color{subtle}#3} & {\small\color{subtle}#4} \\
+    \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \small\color{subtle}#2 \\
+    \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, label={\color{subtle}\textperiodcentered}]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-3pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\huge\bfseries\color{heading} <<name>>} \\[8pt]
+    \small\color{subtle}
+    <% if location %><<location>><% endif %>
+    <% if location and phone %> \enspace\textbar\enspace <% endif %>
+    <<phone>>
+    \enspace\textbar\enspace
+    \href{mailto:<<email>>}{<<email>>}
+    <% if linkedin %> \enspace\textbar\enspace \href{<<linkedin>>}{LinkedIn}<% endif %>
+    <% if github %> \enspace\textbar\enspace \href{<<github>>}{GitHub}<% endif %>
+    <% if website %> \enspace\textbar\enspace \href{<<website>>}{Portfolio}<% endif %>
+\end{center}
+\vspace{-4pt}
+
+<% if summary %>
+\section{About}
+  \small\color{body}{<<summary>>}
+  \vspace{2pt}
+<% endif %>
+
+<% if experience %>
+\section{Experience}
+  \resumeSubHeadingListStart
+<% for exp in experience %>
+    \resumeSubheading
+      {<<exp.position>>}{<<exp.start_date>> -- <<exp.end_date>>}
+      {<<exp.company>>}{<<exp.location>>}
+      \resumeItemListStart
+<% for bullet in exp.bullets %>
+        \resumeItem{<<bullet>>}
+<% endfor %>
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if education %>
+\section{Education}
+  \resumeSubHeadingListStart
+<% for edu in education %>
+    \resumeSubheading
+      {<<edu.degree>> in <<edu.field>>}{<<edu.graduation_date>>}
+      {<<edu.institution>><% if edu.gpa %> \enspace\textbar\enspace GPA: <<edu.gpa>><% endif %>}{<<edu.location>>}
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if projects %>
+\section{Projects}
+  \resumeSubHeadingListStart
+<% for project in projects %>
+    \resumeProjectHeading
+      {\textbf{\color{heading}\small <<project.name>>} \enspace {\small\color{subtle}<<project.technologies|join(' / ')>>}}{}
+      \resumeItemListStart
+        \resumeItem{<<project.description>>}
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if has_skills %>
+\section{Skills}
+ \begin{itemize}[leftmargin=0.1in, label={}]
+    \small{\item{\color{body}
+<% if skills.technical %>
+     \textbf{\color{heading}Programming}\enspace\color{subtle}\textbar\enspace \color{body}<<skills.technical|join('   $\cdot$  ')>> \\[4pt]
+<% endif %>
+<% if skills.frameworks %>
+     \textbf{\color{heading}Frameworks}\enspace\color{subtle}\textbar\enspace \color{body}<<skills.frameworks|join('   $\cdot$  ')>> \\[4pt]
+<% endif %>
+<% if skills.tools %>
+     \textbf{\color{heading}Tools}\enspace\color{subtle}\textbar\enspace \color{body}<<skills.tools|join('   $\cdot$  ')>> \\[4pt]
+<% endif %>
+<% if skills.languages %>
+     \textbf{\color{heading}Languages}\enspace\color{subtle}\textbar\enspace \color{body}<<skills.languages|join('   $\cdot$  ')>>
+<% endif %>
+    }}
+ \end{itemize}
+<% endif %>
+
+<% if certifications %>
+\section{Certifications}
+ \begin{itemize}[leftmargin=0.1in, label={}]
+    \small{\item{\color{body}
+<% for cert in certifications %>
+     \textbf{\color{heading}<<cert.name>>}\enspace\color{subtle}<<cert.issuer>> \enspace\textbar\enspace <<cert.date>><% if not loop.last %> \\[3pt]<% endif %>
+<% endfor %>
+    }}
+ \end{itemize}
+<% endif %>
+
+\end{document}

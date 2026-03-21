@@ -1,0 +1,156 @@
+%-------------------------
+% Classic Resume Template - Traditional serif academic style
+%-------------------------
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{charter}
+\usepackage{geometry}
+
+\geometry{left=0.75in, right=0.75in, top=0.6in, bottom=0.6in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Section formatting - classic underline style
+\titleformat{\section}{
+  \vspace{-4pt}\raggedright\large\bfseries
+}{}{0em}{}[\titlerule \vspace{-5pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{#1 \vspace{-2pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small#4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.2in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\LARGE\bfseries Alex Johnson} \\[4pt]
+    \small
+    San Francisco, CA
+     $\cdot$ 
+    (555) 123-4567 $\cdot$
+    \href{mailto:alex.johnson@email.com}{alex.johnson@email.com}
+     $\cdot$ \href{https://linkedin.com/in/alexjohnson}{LinkedIn}
+     $\cdot$ \href{https://github.com/alexjohnson}{GitHub}
+    
+\end{center}
+
+
+\section{Summary}
+  \small{Full-stack software engineer with 5+ years of experience building scalable web applications. Passionate about clean architecture, developer experience, and shipping products that users love.}
+  \vspace{-2pt}
+
+
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {University of California, Berkeley}{Berkeley, CA}
+      {Bachelor of Science in Computer Science --- GPA: 3.7}{2019-05}
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Senior Software Engineer}{2022-03 -- Present}
+      {TechCorp Inc.}{San Francisco, CA}
+      \resumeItemListStart
+
+        \resumeItem{Led migration of monolithic Rails app to microservices architecture, reducing deploy times by 75\% and improving system reliability to 99.95\% uptime}
+
+        \resumeItem{Designed and implemented real-time data pipeline processing 2M+ events/day using Kafka and Python, enabling instant analytics for 50K users}
+
+        \resumeItem{Mentored 4 junior engineers through code reviews and pair programming, improving team velocity by 30\%}
+
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{2019-06 -- 2022-02}
+      {StartupXYZ}{Remote}
+      \resumeItemListStart
+
+        \resumeItem{Built React frontend serving 100K+ monthly active users with sub-200ms page loads using code splitting and SSR}
+
+        \resumeItem{Developed RESTful API layer in Node.js handling 10K requests/minute with comprehensive test coverage (95\%)}
+
+        \resumeItem{Implemented CI/CD pipeline with GitHub Actions, reducing release cycle from 2 weeks to daily deploys}
+
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Selected Projects}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{DevMetrics Dashboard} $|$ \emph{\small React, Go, PostgreSQL, WebSocket}}{}
+      \resumeItemListStart
+        \resumeItem{Open-source developer productivity dashboard aggregating GitHub, Jira, and CI/CD metrics with real-time WebSocket updates. 500+ GitHub stars.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Technical Proficiencies}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+
+     \textbf{Programming Languages:} Python, TypeScript, Go, Java, SQL \\
+
+
+     \textbf{Frameworks \& Libraries:} React, Next.js, FastAPI, Django, Express \\
+
+
+     \textbf{Tools \& Platforms:} Docker, Kubernetes, AWS, PostgreSQL, Redis, Git \\
+
+
+     \textbf{Languages:} English (Native), Spanish (Conversational)
+
+    }}
+ \end{itemize}
+
+
+
+
+\end{document}

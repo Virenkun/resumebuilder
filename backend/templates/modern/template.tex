@@ -1,0 +1,154 @@
+%-------------------------
+% Modern Resume Template - Two column with accent color
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{fontenc}
+\usepackage{multicol}
+\usepackage{geometry}
+
+\geometry{left=0.6in, right=0.6in, top=0.5in, bottom=0.5in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Define accent color
+\definecolor{accent}{HTML}{2563EB}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{medgray}{HTML}{666666}
+\definecolor{lightgray}{HTML}{999999}
+
+% Section formatting with colored rule
+\titleformat{\section}{
+  \vspace{-6pt}\color{accent}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{accent}\titlerule \vspace{-5pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{\color{darkgray}{#1 \vspace{-2pt}}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{darkgray}#1} & \small\color{lightgray}#2 \\
+      \textit{\small\color{medgray}#3} & \textit{\small\color{lightgray}#4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \small\color{lightgray}#2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.2in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\renewcommand\labelitemii{\color{accent}$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge\bfseries\color{darkgray} <<name>>} \\[6pt]
+    \small\color{medgray}
+    <<phone>> \quad
+    \href{mailto:<<email>>}{\color{accent}\underline{<<email>>}}
+    <% if linkedin %> \quad \href{<<linkedin>>}{\color{accent}\underline{LinkedIn}}<% endif %>
+    <% if github %> \quad \href{<<github>>}{\color{accent}\underline{GitHub}}<% endif %>
+    <% if website %> \quad \href{<<website>>}{\color{accent}\underline{Portfolio}}<% endif %>
+    <% if location %> \quad <<location>><% endif %>
+\end{center}
+
+<% if summary %>
+\section{Profile}
+  \small\color{darkgray}{<<summary>>}
+  \vspace{-2pt}
+<% endif %>
+
+<% if experience %>
+\section{Experience}
+  \resumeSubHeadingListStart
+<% for exp in experience %>
+    \resumeSubheading
+      {<<exp.position>>}{<<exp.start_date>> -- <<exp.end_date>>}
+      {<<exp.company>>}{<<exp.location>>}
+      \resumeItemListStart
+<% for bullet in exp.bullets %>
+        \resumeItem{<<bullet>>}
+<% endfor %>
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if education %>
+\section{Education}
+  \resumeSubHeadingListStart
+<% for edu in education %>
+    \resumeSubheading
+      {<<edu.institution>>}{<<edu.location>>}
+      {<<edu.degree>> in <<edu.field>><% if edu.gpa %> \enspace|\enspace GPA: <<edu.gpa>><% endif %>}{<<edu.graduation_date>>}
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if projects %>
+\section{Projects}
+  \resumeSubHeadingListStart
+<% for project in projects %>
+    \resumeProjectHeading
+      {\textbf{\color{darkgray}<<project.name>>} \enspace$|$\enspace \emph{\small\color{medgray}<<project.technologies|join(', ')>>}}{}
+      \resumeItemListStart
+        \resumeItem{<<project.description>>}
+      \resumeItemListEnd
+<% endfor %>
+  \resumeSubHeadingListEnd
+<% endif %>
+
+<% if has_skills %>
+\section{Skills}
+ \begin{itemize}[leftmargin=0.12in, label={}]
+    \small{\item{
+<% if skills.technical %>
+     \textbf{\color{darkgray}Programming:} \color{medgray}{<<skills.technical|join(', ')>>} \\[2pt]
+<% endif %>
+<% if skills.frameworks %>
+     \textbf{\color{darkgray}Frameworks:} \color{medgray}{<<skills.frameworks|join(', ')>>} \\[2pt]
+<% endif %>
+<% if skills.tools %>
+     \textbf{\color{darkgray}Tools:} \color{medgray}{<<skills.tools|join(', ')>>} \\[2pt]
+<% endif %>
+<% if skills.languages %>
+     \textbf{\color{darkgray}Languages:} \color{medgray}{<<skills.languages|join(', ')>>}
+<% endif %>
+    }}
+ \end{itemize}
+<% endif %>
+
+<% if certifications %>
+\section{Certifications}
+ \begin{itemize}[leftmargin=0.12in, label={}]
+    \small{\item{
+<% for cert in certifications %>
+     \textbf{\color{darkgray}<<cert.name>>} \color{medgray}{-- <<cert.issuer>> (<<cert.date>>)}<% if not loop.last %> \\[2pt]<% endif %>
+<% endfor %>
+    }}
+ \end{itemize}
+<% endif %>
+
+\end{document}

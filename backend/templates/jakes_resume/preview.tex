@@ -1,0 +1,178 @@
+%-------------------------
+% Jake's Resume Template (adapted for Jinja2 variable injection)
+%-------------------------
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Section formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Alex Johnson} \\ \vspace{1pt}
+    \small (555) 123-4567 $|$
+    \href{mailto:alex.johnson@email.com}{\underline{alex.johnson@email.com}}
+     $|$ \href{https://linkedin.com/in/alexjohnson}{\underline{LinkedIn}}
+     $|$ \href{https://github.com/alexjohnson}{\underline{GitHub}}
+    
+     $|$ San Francisco, CA
+\end{center}
+
+
+%-----------SUMMARY-----------
+\section{Summary}
+  \small{Full-stack software engineer with 5+ years of experience building scalable web applications. Passionate about clean architecture, developer experience, and shipping products that users love.}
+
+
+%-----------EXPERIENCE-----------
+
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Senior Software Engineer}{2022-03 -- Present}
+      {TechCorp Inc.}{San Francisco, CA}
+      \resumeItemListStart
+
+        \resumeItem{Led migration of monolithic Rails app to microservices architecture, reducing deploy times by 75\% and improving system reliability to 99.95\% uptime}
+
+        \resumeItem{Designed and implemented real-time data pipeline processing 2M+ events/day using Kafka and Python, enabling instant analytics for 50K users}
+
+        \resumeItem{Mentored 4 junior engineers through code reviews and pair programming, improving team velocity by 30\%}
+
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{2019-06 -- 2022-02}
+      {StartupXYZ}{Remote}
+      \resumeItemListStart
+
+        \resumeItem{Built React frontend serving 100K+ monthly active users with sub-200ms page loads using code splitting and SSR}
+
+        \resumeItem{Developed RESTful API layer in Node.js handling 10K requests/minute with comprehensive test coverage (95\%)}
+
+        \resumeItem{Implemented CI/CD pipeline with GitHub Actions, reducing release cycle from 2 weeks to daily deploys}
+
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------EDUCATION-----------
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {University of California, Berkeley}{Berkeley, CA}
+      {Bachelor of Science in Computer Science, GPA: 3.7}{2019-05}
+
+  \resumeSubHeadingListEnd
+
+
+%-----------PROJECTS-----------
+
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{DevMetrics Dashboard} $|$ \emph{\small React, Go, PostgreSQL, WebSocket}}{}
+      \resumeItemListStart
+        \resumeItem{Open-source developer productivity dashboard aggregating GitHub, Jira, and CI/CD metrics with real-time WebSocket updates. 500+ GitHub stars.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------SKILLS-----------
+
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+
+     \textbf{Programming}{: Python, TypeScript, Go, Java, SQL} \\
+
+
+     \textbf{Frameworks}{: React, Next.js, FastAPI, Django, Express} \\
+
+
+     \textbf{Developer Tools}{: Docker, Kubernetes, AWS, PostgreSQL, Redis, Git} \\
+
+
+     \textbf{Languages}{: English (Native), Spanish (Conversational)}
+
+    }}
+ \end{itemize}
+
+
+%-----------CERTIFICATIONS-----------
+
+
+%-------------------------------------------
+\end{document}

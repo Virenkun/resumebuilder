@@ -1,0 +1,163 @@
+%-------------------------
+% Minimal Resume Template - Ultra clean, generous whitespace
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{geometry}
+
+\geometry{left=0.8in, right=0.8in, top=0.7in, bottom=0.7in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\definecolor{heading}{rgb}{0.1, 0.1, 0.1}
+\definecolor{body}{rgb}{0.27, 0.27, 0.27}
+\definecolor{subtle}{rgb}{0.53, 0.53, 0.53}
+
+% Section formatting - minimal thin rule
+\newcommand{\sectiontitle}[1]{\MakeUppercase{#1}}
+\titleformat{\section}{
+  \vspace{-2pt}\color{heading}\raggedright\normalsize\bfseries
+}{}{0em}{\MakeUppercase}[\vspace{-4pt}{\color{subtle}\rule{\textwidth}{0.3pt}} \vspace{-4pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{\color{body}{#1}\vspace{-1pt}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{heading}\small#1} & \small\color{subtle}#2 \\
+      {\small\color{subtle}#3} & {\small\color{subtle}#4} \\
+    \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \small\color{subtle}#2 \\
+    \end{tabular*}\vspace{-4pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.1in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.15in, label={\color{subtle}\textperiodcentered}]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-3pt}}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\huge\bfseries\color{heading} Alex Johnson} \\[8pt]
+    \small\color{subtle}
+    San Francisco, CA
+     \enspace\textbar\enspace 
+    (555) 123-4567
+    \enspace\textbar\enspace
+    \href{mailto:alex.johnson@email.com}{alex.johnson@email.com}
+     \enspace\textbar\enspace \href{https://linkedin.com/in/alexjohnson}{LinkedIn}
+     \enspace\textbar\enspace \href{https://github.com/alexjohnson}{GitHub}
+    
+\end{center}
+\vspace{-4pt}
+
+
+\section{About}
+  \small\color{body}{Full-stack software engineer with 5+ years of experience building scalable web applications. Passionate about clean architecture, developer experience, and shipping products that users love.}
+  \vspace{2pt}
+
+
+
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Senior Software Engineer}{2022-03 -- Present}
+      {TechCorp Inc.}{San Francisco, CA}
+      \resumeItemListStart
+
+        \resumeItem{Led migration of monolithic Rails app to microservices architecture, reducing deploy times by 75\% and improving system reliability to 99.95\% uptime}
+
+        \resumeItem{Designed and implemented real-time data pipeline processing 2M+ events/day using Kafka and Python, enabling instant analytics for 50K users}
+
+        \resumeItem{Mentored 4 junior engineers through code reviews and pair programming, improving team velocity by 30\%}
+
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{2019-06 -- 2022-02}
+      {StartupXYZ}{Remote}
+      \resumeItemListStart
+
+        \resumeItem{Built React frontend serving 100K+ monthly active users with sub-200ms page loads using code splitting and SSR}
+
+        \resumeItem{Developed RESTful API layer in Node.js handling 10K requests/minute with comprehensive test coverage (95\%)}
+
+        \resumeItem{Implemented CI/CD pipeline with GitHub Actions, reducing release cycle from 2 weeks to daily deploys}
+
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Bachelor of Science in Computer Science}{2019-05}
+      {University of California, Berkeley \enspace\textbar\enspace GPA: 3.7}{Berkeley, CA}
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{\color{heading}\small DevMetrics Dashboard} \enspace {\small\color{subtle}React / Go / PostgreSQL / WebSocket}}{}
+      \resumeItemListStart
+        \resumeItem{Open-source developer productivity dashboard aggregating GitHub, Jira, and CI/CD metrics with real-time WebSocket updates. 500+ GitHub stars.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Skills}
+ \begin{itemize}[leftmargin=0.1in, label={}]
+    \small{\item{\color{body}
+
+     \textbf{\color{heading}Programming}\enspace\color{subtle}\textbar\enspace \color{body}Python   $\cdot$  TypeScript   $\cdot$  Go   $\cdot$  Java   $\cdot$  SQL \\[4pt]
+
+
+     \textbf{\color{heading}Frameworks}\enspace\color{subtle}\textbar\enspace \color{body}React   $\cdot$  Next.js   $\cdot$  FastAPI   $\cdot$  Django   $\cdot$  Express \\[4pt]
+
+
+     \textbf{\color{heading}Tools}\enspace\color{subtle}\textbar\enspace \color{body}Docker   $\cdot$  Kubernetes   $\cdot$  AWS   $\cdot$  PostgreSQL   $\cdot$  Redis   $\cdot$  Git \\[4pt]
+
+
+     \textbf{\color{heading}Languages}\enspace\color{subtle}\textbar\enspace \color{body}English (Native)   $\cdot$  Spanish (Conversational)
+
+    }}
+ \end{itemize}
+
+
+
+
+\end{document}

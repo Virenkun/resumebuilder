@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/storage:/app/storage
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - BACKEND_URL=${BACKEND_URL:-http://localhost:8000}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
+      - STORAGE_PATH=/app/storage
+      - LATEX_DOCKER_IMAGE=resumebuilder-latex-compiler
+    env_file:
+      - .env
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - latex-compiler
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=${BACKEND_URL:-http://localhost:8000}
+    command: npm run dev -- --host 0.0.0.0
+
+  latex-compiler:
+    build:
+      context: ./latex-compiler
+      dockerfile: Dockerfile
+    image: resumebuilder-latex-compiler
+    volumes:
+      - ./backend/storage:/compile
+    command: ["sleep", "infinity"] # Keep container running
+
+volumes:
+  storage:
+  node_modules:

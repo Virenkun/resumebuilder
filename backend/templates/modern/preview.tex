@@ -1,0 +1,162 @@
+%-------------------------
+% Modern Resume Template - Two column with accent color
+%-------------------------
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{fontenc}
+\usepackage{multicol}
+\usepackage{geometry}
+
+\geometry{left=0.6in, right=0.6in, top=0.5in, bottom=0.5in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Define accent color
+\definecolor{accent}{HTML}{2563EB}
+\definecolor{darkgray}{HTML}{333333}
+\definecolor{medgray}{HTML}{666666}
+\definecolor{lightgray}{HTML}{999999}
+
+% Section formatting with colored rule
+\titleformat{\section}{
+  \vspace{-6pt}\color{accent}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{accent}\titlerule \vspace{-5pt}]
+
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{\color{darkgray}{#1 \vspace{-2pt}}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{\color{darkgray}#1} & \small\color{lightgray}#2 \\
+      \textit{\small\color{medgray}#3} & \textit{\small\color{lightgray}#4} \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \small\color{lightgray}#2 \\
+    \end{tabular*}\vspace{-6pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.12in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[leftmargin=0.2in]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\renewcommand\labelitemii{\color{accent}$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge\bfseries\color{darkgray} Alex Johnson} \\[6pt]
+    \small\color{medgray}
+    (555) 123-4567 \quad
+    \href{mailto:alex.johnson@email.com}{\color{accent}\underline{alex.johnson@email.com}}
+     \quad \href{https://linkedin.com/in/alexjohnson}{\color{accent}\underline{LinkedIn}}
+     \quad \href{https://github.com/alexjohnson}{\color{accent}\underline{GitHub}}
+    
+     \quad San Francisco, CA
+\end{center}
+
+
+\section{Profile}
+  \small\color{darkgray}{Full-stack software engineer with 5+ years of experience building scalable web applications. Passionate about clean architecture, developer experience, and shipping products that users love.}
+  \vspace{-2pt}
+
+
+
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Senior Software Engineer}{2022-03 -- Present}
+      {TechCorp Inc.}{San Francisco, CA}
+      \resumeItemListStart
+
+        \resumeItem{Led migration of monolithic Rails app to microservices architecture, reducing deploy times by 75\% and improving system reliability to 99.95\% uptime}
+
+        \resumeItem{Designed and implemented real-time data pipeline processing 2M+ events/day using Kafka and Python, enabling instant analytics for 50K users}
+
+        \resumeItem{Mentored 4 junior engineers through code reviews and pair programming, improving team velocity by 30\%}
+
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{2019-06 -- 2022-02}
+      {StartupXYZ}{Remote}
+      \resumeItemListStart
+
+        \resumeItem{Built React frontend serving 100K+ monthly active users with sub-200ms page loads using code splitting and SSR}
+
+        \resumeItem{Developed RESTful API layer in Node.js handling 10K requests/minute with comprehensive test coverage (95\%)}
+
+        \resumeItem{Implemented CI/CD pipeline with GitHub Actions, reducing release cycle from 2 weeks to daily deploys}
+
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Education}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {University of California, Berkeley}{Berkeley, CA}
+      {Bachelor of Science in Computer Science \enspace|\enspace GPA: 3.7}{2019-05}
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Projects}
+  \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+      {\textbf{\color{darkgray}DevMetrics Dashboard} \enspace$|$\enspace \emph{\small\color{medgray}React, Go, PostgreSQL, WebSocket}}{}
+      \resumeItemListStart
+        \resumeItem{Open-source developer productivity dashboard aggregating GitHub, Jira, and CI/CD metrics with real-time WebSocket updates. 500+ GitHub stars.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+
+\section{Skills}
+ \begin{itemize}[leftmargin=0.12in, label={}]
+    \small{\item{
+
+     \textbf{\color{darkgray}Programming:} \color{medgray}{Python, TypeScript, Go, Java, SQL} \\[2pt]
+
+
+     \textbf{\color{darkgray}Frameworks:} \color{medgray}{React, Next.js, FastAPI, Django, Express} \\[2pt]
+
+
+     \textbf{\color{darkgray}Tools:} \color{medgray}{Docker, Kubernetes, AWS, PostgreSQL, Redis, Git} \\[2pt]
+
+
+     \textbf{\color{darkgray}Languages:} \color{medgray}{English (Native), Spanish (Conversational)}
+
+    }}
+ \end{itemize}
+
+
+
+
+\end{document}
