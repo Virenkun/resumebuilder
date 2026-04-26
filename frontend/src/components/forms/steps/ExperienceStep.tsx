@@ -119,7 +119,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="border border-gray-200 rounded-lg p-4 hover:border-green-300 transition-colors"
+              className="shadow-ring rounded-2xl bg-card p-4 transition-colors hover:shadow-ring-green"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
@@ -147,7 +147,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                   <button
                     type="button"
                     onClick={() => handleEdit(exp)}
-                    className="text-green-700 hover:text-green-800 text-sm font-medium"
+                    className="text-sm font-semibold text-[#054d28] hover:text-[#163300]"
                   >
                     Edit
                   </button>
@@ -182,7 +182,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                 type="text"
                 value={formData.company}
                 onChange={(e) => handleChange("company", e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                   errors.company ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Acme Corp"
@@ -200,7 +200,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                 type="text"
                 value={formData.position}
                 onChange={(e) => handleChange("position", e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                   errors.position ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Software Engineer"
@@ -220,7 +220,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
               type="text"
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.location ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="San Francisco, CA"
@@ -240,7 +240,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                 type="text"
                 value={formData.start_date}
                 onChange={(e) => handleChange("start_date", e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                   errors.start_date ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="2022-01"
@@ -259,7 +259,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                 type="text"
                 value={formData.end_date}
                 onChange={(e) => handleChange("end_date", e.target.value)}
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                   errors.end_date ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder='2024-01 or "Present"'
@@ -285,7 +285,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
                   <textarea
                     value={bullet}
                     onChange={(e) => handleBulletChange(index, e.target.value)}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                     placeholder="Led development of feature X, resulting in Y% improvement..."
                     rows={2}
                   />
@@ -304,7 +304,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
             <button
               type="button"
               onClick={addBullet}
-              className="mt-2 text-green-700 hover:text-green-800 text-sm font-medium"
+              className="mt-2 text-sm font-semibold text-[#054d28] hover:text-[#163300]"
             >
               + Add Another Bullet
             </button>
@@ -318,7 +318,7 @@ export default function ExperienceStep({ onNext }: ExperienceStepProps) {
             <button
               type="button"
               onClick={handleSave}
-              className="px-4 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800"
+              className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-bold text-[#163300] transition-transform hover:scale-[1.05] active:scale-[0.95]"
             >
               {editingId ? "Update" : "Add"} Experience
             </button>

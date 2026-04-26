@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { Document, Page } from "react-pdf";
+import { Minus, Plus, X } from "lucide-react";
 import { usePdfBlobUrl } from "./usePdfBlobUrl";
 
 export function TemplatePreviewModal({
@@ -21,62 +22,64 @@ export function TemplatePreviewModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[92vh] flex flex-col overflow-hidden"
+        className="shadow-ring flex h-full max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-card"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with zoom controls */}
-        <div className="flex items-center justify-between px-5 py-3 border-b shrink-0">
-          <h3 className="font-semibold text-gray-900">Template Preview</h3>
+        <div className="flex shrink-0 items-center justify-between border-b border-[rgba(14,15,12,0.08)] px-6 py-4">
+          <h3 className="font-display text-xl text-foreground">
+            Template preview
+          </h3>
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center gap-1 rounded-full bg-muted p-1">
               <button
                 onClick={zoomOut}
-                className="w-8 h-8 flex items-center justify-center rounded text-gray-600 hover:bg-white hover:shadow-sm transition-all text-lg"
+                className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-card hover:text-foreground"
               >
-                -
+                <Minus className="size-4" />
               </button>
-              <span className="text-xs text-gray-600 w-12 text-center font-medium">
+              <span className="w-12 text-center text-xs font-semibold text-foreground">
                 {Math.round(scale * 100)}%
               </span>
               <button
                 onClick={zoomIn}
-                className="w-8 h-8 flex items-center justify-center rounded text-gray-600 hover:bg-white hover:shadow-sm transition-all text-lg"
+                className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-card hover:text-foreground"
               >
-                +
+                <Plus className="size-4" />
               </button>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-xl leading-none ml-2"
+              className="inline-flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
             >
-              &times;
+              <X className="size-4" />
             </button>
           </div>
         </div>
 
-        {/* PDF Content */}
-        <div className="flex-1 overflow-auto bg-gray-100 p-6 flex justify-center">
+        <div className="flex flex-1 justify-center overflow-auto bg-muted p-6">
           <Document
             file={blobUrl}
             onLoadSuccess={({ numPages: n }) => setNumPages(n)}
             loading={
               <div className="flex items-center justify-center py-20">
-                <p className="text-gray-400">Loading PDF...</p>
+                <p className="text-sm text-muted-foreground">Loading PDF…</p>
               </div>
             }
             error={
               <div className="flex items-center justify-center py-20">
-                <p className="text-red-400">Failed to load preview</p>
+                <p className="text-sm text-destructive">
+                  Failed to load preview
+                </p>
               </div>
             }
           >
             <div className="space-y-4">
               {Array.from({ length: numPages }, (_, i) => (
-                <div key={i} className="shadow-lg">
+                <div key={i} className="shadow-ring overflow-hidden rounded-2xl">
                   <Page
                     pageNumber={i + 1}
                     scale={scale}

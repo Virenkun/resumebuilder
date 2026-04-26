@@ -16,15 +16,15 @@ RUN apt-get update && apt-get install -y \
     libpng16-16 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Tectonic from continuous release (has ARM64 binaries)
+# Install Tectonic from a tagged release (has ARM64 binaries)
 RUN ARCH=$(dpkg --print-architecture) && \
     if [ "$ARCH" = "arm64" ]; then \
         TECTONIC_ARCH="aarch64-unknown-linux-musl"; \
     else \
         TECTONIC_ARCH="x86_64-unknown-linux-musl"; \
     fi && \
-    TECTONIC_VERSION="0.15.0+20251006" && \
-    curl -fsSL "https://github.com/tectonic-typesetting/tectonic/releases/download/continuous/tectonic-${TECTONIC_VERSION}-${TECTONIC_ARCH}.tar.gz" \
+    TECTONIC_VERSION="0.15.0" && \
+    curl -fsSL "https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic@${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-${TECTONIC_ARCH}.tar.gz" \
     -o /tmp/tectonic.tar.gz && \
     tar xzf /tmp/tectonic.tar.gz -C /usr/local/bin && \
     rm /tmp/tectonic.tar.gz && \

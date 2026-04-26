@@ -1,4 +1,9 @@
 import { useState } from "react";
+import { AlertTriangle, CheckCircle2, Loader2, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export function ScoreTab({
   scoreData,
@@ -17,192 +22,187 @@ export function ScoreTab({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border p-5">
-        <h3 className="font-semibold text-gray-900 mb-3">
-          ATS Compatibility Score
+      <section className="shadow-ring rounded-3xl bg-card p-6">
+        <h3 className="font-display text-2xl text-foreground">
+          ATS compatibility
         </h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Score your resume against general ATS rules or a specific job
+          description.
+        </p>
 
-        {/* Mode toggle */}
-        <div className="flex gap-2 mb-4">
-          <button
-            onClick={() => {
-              setScoreMode("general");
-              setJobDescription("");
-            }}
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium border transition-colors ${
-              scoreMode === "general"
-                ? "bg-green-700 text-white border-green-700"
-                : "bg-white text-gray-600 border-gray-300 hover:border-green-400"
-            }`}
-          >
-            General ATS Score
-          </button>
-          <button
-            onClick={() => setScoreMode("jd")}
-            className={`flex-1 py-2 px-4 rounded-lg text-sm font-medium border transition-colors ${
-              scoreMode === "jd"
-                ? "bg-green-700 text-white border-green-700"
-                : "bg-white text-gray-600 border-gray-300 hover:border-green-400"
-            }`}
-          >
-            Match to Job Description
-          </button>
+        <div className="mt-5 flex gap-1 rounded-full bg-muted p-1">
+          {(["general", "jd"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => {
+                setScoreMode(m);
+                if (m === "general") setJobDescription("");
+              }}
+              className={cn(
+                "flex-1 rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                scoreMode === m
+                  ? "bg-card text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {m === "general" ? "General ATS" : "Match to JD"}
+            </button>
+          ))}
         </div>
 
-        {scoreMode === "general" ? (
-          <p className="text-sm text-gray-600 mb-4">
-            Analyze your resume for general ATS compatibility — formatting,
-            keywords, section completeness, and readability.
-          </p>
-        ) : (
-          <>
-            <p className="text-sm text-gray-600 mb-3">
-              Paste a job description to get keyword match percentage and
-              tailored recommendations.
-            </p>
-            <textarea
+        {scoreMode === "jd" && (
+          <div className="mt-5">
+            <Textarea
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 mb-4"
               rows={5}
-              placeholder="Paste job description here..."
+              placeholder="Paste the job description here…"
+              className="min-h-32"
             />
-          </>
+          </div>
         )}
 
-        <button
+        <Button
           onClick={onScore}
           disabled={scoring || (scoreMode === "jd" && !jobDescription.trim())}
-          className="px-6 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800 disabled:opacity-50"
+          size="lg"
+          className="mt-5"
         >
-          {scoring
-            ? "Analyzing..."
-            : scoreMode === "jd"
-              ? "Score Against JD"
-              : "Analyze Resume"}
-        </button>
-        {scoreMode === "jd" && !jobDescription.trim() && (
-          <p className="text-xs text-gray-400 mt-2">
-            Paste a job description above to enable scoring.
-          </p>
-        )}
-      </div>
+          {scoring ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Analysing…
+            </>
+          ) : (
+            <>
+              <Sparkles className="size-4" />
+              {scoreMode === "jd" ? "Score against JD" : "Analyse resume"}
+            </>
+          )}
+        </Button>
+      </section>
 
       {scoreData && (
-        <div className="space-y-4">
-          {/* Score Display */}
-          <div className="bg-white rounded-lg shadow-sm border p-5">
+        <div className="space-y-5">
+          <section className="shadow-ring rounded-3xl bg-card p-6">
             <div className="flex items-center gap-6">
               <div
-                className={`text-5xl font-bold ${
+                className={cn(
+                  "font-display text-6xl leading-none",
                   scoreData.score >= 80
-                    ? "text-green-600"
+                    ? "text-[#054d28]"
                     : scoreData.score >= 60
-                      ? "text-yellow-600"
-                      : "text-red-600"
-                }`}
+                      ? "text-[#a56b00]"
+                      : "text-destructive",
+                )}
               >
                 {scoreData.score}
-                <span className="text-2xl text-gray-400">/100</span>
+                <span className="text-2xl text-muted-foreground">/100</span>
               </div>
               <div>
-                <p className="text-lg font-medium text-gray-900">
-                  {scoreMode === "jd" ? "JD Match Score" : "General ATS Score"}
+                <p className="text-base font-semibold text-foreground">
+                  {scoreMode === "jd" ? "JD match" : "General ATS"}
                 </p>
-                <p className="text-xs text-gray-400 mb-1">
+                <p className="mt-1 text-xs text-muted-foreground">
                   {scoreMode === "jd"
-                    ? "Scored against job description"
-                    : "General ATS compatibility"}
+                    ? "Scored against the pasted job description."
+                    : "General ATS compatibility across formatting and structure."}
                 </p>
                 {scoreData.keyword_match != null && (
-                  <span className="inline-block bg-green-50 text-green-800 text-sm font-medium px-2 py-0.5 rounded">
-                    Keyword Match: {scoreData.keyword_match}%
-                  </span>
+                  <Badge variant="secondary" className="mt-2">
+                    Keyword match {scoreData.keyword_match}%
+                  </Badge>
                 )}
               </div>
             </div>
-          </div>
+          </section>
 
-          {/* Issues */}
           {scoreData.issues && (
-            <div className="bg-white rounded-lg shadow-sm border p-5">
-              <h4 className="font-semibold text-gray-900 mb-3">Issues</h4>
-
-              {scoreData.issues.critical?.length > 0 && (
-                <div className="mb-4">
-                  <h5 className="text-sm font-medium text-red-700 mb-1">
-                    Critical
-                  </h5>
-                  <ul className="space-y-1">
-                    {scoreData.issues.critical.map(
-                      (issue: string, i: number) => (
-                        <li
-                          key={i}
-                          className="text-sm text-red-600 pl-4 relative"
-                        >
-                          <span className="absolute left-0">!</span>
-                          {issue}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              {scoreData.issues.recommended?.length > 0 && (
-                <div className="mb-4">
-                  <h5 className="text-sm font-medium text-yellow-700 mb-1">
-                    Recommended
-                  </h5>
-                  <ul className="space-y-1">
-                    {scoreData.issues.recommended.map(
-                      (issue: string, i: number) => (
-                        <li key={i} className="text-sm text-yellow-700 pl-4">
-                          - {issue}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              {scoreData.issues.optional?.length > 0 && (
-                <div>
-                  <h5 className="text-sm font-medium text-gray-600 mb-1">
-                    Optional
-                  </h5>
-                  <ul className="space-y-1">
-                    {scoreData.issues.optional.map(
-                      (issue: string, i: number) => (
-                        <li key={i} className="text-sm text-gray-500 pl-4">
-                          - {issue}
-                        </li>
-                      ),
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
+            <section className="shadow-ring rounded-3xl bg-card p-6">
+              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                Issues
+              </h4>
+              <IssueGroup
+                tone="critical"
+                label="Critical"
+                items={scoreData.issues.critical ?? []}
+              />
+              <IssueGroup
+                tone="recommended"
+                label="Recommended"
+                items={scoreData.issues.recommended ?? []}
+              />
+              <IssueGroup
+                tone="optional"
+                label="Optional"
+                items={scoreData.issues.optional ?? []}
+              />
+            </section>
           )}
 
-          {/* Suggestions */}
           {scoreData.suggestions?.length > 0 && (
-            <div className="bg-white rounded-lg shadow-sm border p-5">
-              <h4 className="font-semibold text-gray-900 mb-3">Suggestions</h4>
-              <ul className="space-y-2">
+            <section className="shadow-ring rounded-3xl bg-card p-6">
+              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                Suggestions
+              </h4>
+              <ul className="space-y-3">
                 {scoreData.suggestions.map((s: string, i: number) => (
-                  <li key={i} className="text-sm text-gray-700 pl-4 relative">
-                    <span className="absolute left-0 text-green-500">
-                      {i + 1}.
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="mt-0.5 inline-flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-bold text-[#054d28]">
+                      {i + 1}
                     </span>
-                    {s}
+                    <span className="text-sm text-foreground">{s}</span>
                   </li>
                 ))}
               </ul>
-            </div>
+            </section>
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function IssueGroup({
+  tone,
+  label,
+  items,
+}: {
+  tone: "critical" | "recommended" | "optional";
+  label: string;
+  items: string[];
+}) {
+  if (items.length === 0) return null;
+
+  const iconMap = {
+    critical: <AlertTriangle className="size-4 text-destructive" />,
+    recommended: <AlertTriangle className="size-4 text-[#a56b00]" />,
+    optional: <CheckCircle2 className="size-4 text-muted-foreground" />,
+  };
+
+  const toneMap = {
+    critical: "text-destructive",
+    recommended: "text-[#a56b00]",
+    optional: "text-muted-foreground",
+  };
+
+  return (
+    <div className="mb-5 last:mb-0">
+      <div className="mb-2 flex items-center gap-2">
+        {iconMap[tone]}
+        <h5 className={cn("text-xs font-bold uppercase tracking-wider", toneMap[tone])}>
+          {label}
+        </h5>
+      </div>
+      <ul className="space-y-1.5">
+        {items.map((issue, i) => (
+          <li key={i} className="pl-6 text-sm text-foreground">
+            {issue}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

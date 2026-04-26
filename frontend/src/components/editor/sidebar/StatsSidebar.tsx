@@ -1,4 +1,4 @@
-import React from "react";
+import { cn } from "@/lib/utils";
 
 export function StatsSidebar({
   resume,
@@ -8,58 +8,45 @@ export function StatsSidebar({
   scoreData: any;
 }) {
   return (
-    <div
-      className="rounded-2xl p-5"
-      style={{
-        background: "rgba(255,255,255,0.85)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        border: "1px solid rgba(153,246,228,0.40)",
-        boxShadow: "0 2px 16px rgba(13,148,136,0.06)",
-      }}
-    >
-      <h3
-        className="font-bold mb-3 text-sm tracking-wide"
-        style={{ color: "#1b5e20" }}
-      >
-        Resume Stats
+    <div className="shadow-ring rounded-3xl bg-card p-5">
+      <h3 className="mb-3 text-[11px] font-bold uppercase tracking-wider text-[#054d28]">
+        Resume stats
       </h3>
       <div className="space-y-2 text-sm">
-        <div className="flex justify-between">
-          <span className="text-gray-600">Experience entries</span>
-          <span className="font-medium">{resume.experience.length}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600">Education entries</span>
-          <span className="font-medium">{resume.education.length}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600">Total skills</span>
-          <span className="font-medium">
-            {Object.values(resume.skills).flat().length}
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-600">Projects</span>
-          <span className="font-medium">{resume.projects.length}</span>
-        </div>
+        <Row label="Experience entries" value={resume.experience.length} />
+        <Row label="Education entries" value={resume.education.length} />
+        <Row
+          label="Total skills"
+          value={Object.values(resume.skills).flat().length}
+        />
+        <Row label="Projects" value={resume.projects.length} />
         {scoreData && (
-          <div className="flex justify-between pt-2 border-t">
-            <span className="text-gray-600">ATS Score</span>
+          <div className="flex justify-between border-t border-[rgba(14,15,12,0.08)] pt-2">
+            <span className="text-muted-foreground">ATS score</span>
             <span
-              className={`font-bold ${
+              className={cn(
+                "font-bold",
                 scoreData.score >= 80
-                  ? "text-green-600"
+                  ? "text-[#054d28]"
                   : scoreData.score >= 60
-                    ? "text-yellow-600"
-                    : "text-red-600"
-              }`}
+                    ? "text-[#a56b00]"
+                    : "text-destructive",
+              )}
             >
               {scoreData.score}/100
             </span>
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div className="flex justify-between">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="font-semibold text-foreground">{value}</span>
     </div>
   );
 }

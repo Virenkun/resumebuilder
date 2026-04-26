@@ -77,13 +77,13 @@ export default function SkillsStep({ onNext }: SkillsStepProps) {
             setNewSkill({ ...newSkill, [category]: e.target.value })
           }
           onKeyPress={(e) => handleKeyPress(e, category)}
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+          className="flex-1 rounded-full border border-input bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary"
           placeholder={placeholder}
         />
         <button
           type="button"
           onClick={() => addSkill(category)}
-          className="px-4 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800"
+          className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-bold text-[#163300] transition-transform hover:scale-[1.05] active:scale-[0.95]"
         >
           Add
         </button>
@@ -92,13 +92,13 @@ export default function SkillsStep({ onNext }: SkillsStepProps) {
         {skills[category].map((skill, index) => (
           <span
             key={index}
-            className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+            className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm font-semibold text-[#054d28]"
           >
             {skill}
             <button
               type="button"
               onClick={() => removeSkill(category, index)}
-              className="hover:text-green-900"
+              className="hover:text-[#163300]"
             >
               ✕
             </button>
@@ -110,10 +110,11 @@ export default function SkillsStep({ onNext }: SkillsStepProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          💡 <strong>Tip:</strong> Add skills relevant to your target roles. You
-          can organize them by category for better readability.
+      <div className="rounded-2xl border border-primary/40 bg-secondary/40 p-4">
+        <p className="text-sm text-[#054d28]">
+          <strong className="font-bold">Tip:</strong> Add skills relevant to
+          your target roles. You can organize them by category for better
+          readability.
         </p>
       </div>
 

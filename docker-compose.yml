@@ -8,14 +8,12 @@ services:
     volumes:
       - ./backend:/app
       - ./backend/storage:/app/storage
+      - tectonic-cache:/root/.cache/Tectonic
     environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - BACKEND_URL=${BACKEND_URL:-http://localhost:8000}
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5173}
       - STORAGE_PATH=/app/storage
       - LATEX_DOCKER_IMAGE=resumebuilder-latex-compiler
     env_file:
-      - .env
+      - ./backend/.env
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - latex-compiler
@@ -29,8 +27,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    environment:
-      - VITE_API_URL=${BACKEND_URL:-http://localhost:8000}
+    env_file:
+      - ./frontend/.env
     command: npm run dev -- --host 0.0.0.0
 
   latex-compiler:
@@ -45,3 +43,4 @@ services:
 volumes:
   storage:
   node_modules:
+  tectonic-cache:

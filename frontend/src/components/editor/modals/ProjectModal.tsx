@@ -1,4 +1,6 @@
-import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { SectionModal } from "../ui/SectionModal";
 
 export function ProjectModal({
@@ -20,42 +22,32 @@ export function ProjectModal({
 }) {
   return (
     <SectionModal
-      title={isEditing ? "Edit Project" : "Add Project"}
+      title={isEditing ? "Edit project" : "Add project"}
       onClose={onClose}
       onSave={onSave}
       onEnhance={onEnhance}
       enhancing={enhancing}
     >
-      <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Project Name
-          </label>
-          <input
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <Label>Project name</Label>
+          <Input
             value={draft.name}
             onChange={(e) => onChange({ ...draft, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
+        <div className="space-y-1.5">
+          <Label>Description</Label>
+          <Textarea
             value={draft.description}
-            onChange={(e) =>
-              onChange({ ...draft, description: e.target.value })
-            }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            onChange={(e) => onChange({ ...draft, description: e.target.value })}
             rows={3}
-            placeholder="Describe the project..."
+            placeholder="Describe the project…"
           />
         </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Technologies
-          </label>
-          <input
+        <div className="space-y-1.5">
+          <Label>Technologies</Label>
+          <Input
             value={draft.technologies.join(", ")}
             onChange={(e) =>
               onChange({
@@ -66,25 +58,21 @@ export function ProjectModal({
                   .filter(Boolean),
               })
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="React, Node.js, PostgreSQL..."
+            placeholder="React, Node.js, PostgreSQL…"
           />
         </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Link (optional)
-          </label>
-          <input
+        <div className="space-y-1.5">
+          <Label>Link (optional)</Label>
+          <Input
             value={draft.link || ""}
             onChange={(e) => onChange({ ...draft, link: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="https://..."
+            placeholder="https://…"
           />
         </div>
+        <p className="text-xs text-muted-foreground">
+          AI Enhance will improve your project description.
+        </p>
       </div>
-      <p className="text-xs text-gray-400">
-        AI Enhance will improve your project description.
-      </p>
     </SectionModal>
   );
 }

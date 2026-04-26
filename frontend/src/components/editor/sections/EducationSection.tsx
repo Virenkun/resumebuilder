@@ -1,5 +1,5 @@
-import React from "react";
-import { PencilIcon } from "../icons/PencilIcon";
+import { Pencil, Plus, Trash2 } from "lucide-react";
+import { HintTip } from "../ui/HintTip";
 
 export function EducationSection({
   education,
@@ -17,45 +17,50 @@ export function EducationSection({
       {education.map((edu: any, idx: number) => (
         <div
           key={edu.id}
-          className="flex items-start justify-between group/item"
+          className="group/item flex items-start justify-between"
         >
-          <div className="text-sm text-gray-700">
-            <span className="font-medium">
+          <div className="text-sm text-foreground">
+            <span className="font-semibold">
               {edu.degree} in {edu.field}
             </span>{" "}
-            - {edu.institution} ({edu.graduation_date})
+            <span className="text-muted-foreground">
+              · {edu.institution} · {edu.graduation_date}
+            </span>
             {edu.gpa && (
-              <span className="text-gray-500 ml-2">GPA: {edu.gpa}</span>
+              <span className="ml-2 text-muted-foreground">GPA {edu.gpa}</span>
             )}
           </div>
-          <div className="flex gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
-            <button
-              onClick={() => onEdit(idx)}
-              className="p-1.5 rounded text-gray-400 hover:text-green-700 hover:bg-green-50"
-            >
-              <PencilIcon className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => onDelete(idx)}
-              className="p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50"
-            >
-              <svg className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+          <div className="flex gap-1">
+            <HintTip label="Edit this education entry">
+              <button
+                onClick={() => onEdit(idx)}
+                aria-label="Edit education"
+                className="inline-flex size-7 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-[#054d28]"
+              >
+                <Pencil className="size-3.5" />
+              </button>
+            </HintTip>
+            <HintTip label="Remove this education entry">
+              <button
+                onClick={() => onDelete(idx)}
+                aria-label="Delete education"
+                className="inline-flex size-7 items-center justify-center rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            </HintTip>
           </div>
         </div>
       ))}
-      <button
-        onClick={onAdd}
-        className="text-sm text-green-700 hover:text-green-800 font-medium"
-      >
-        + Add Education
-      </button>
+      <HintTip label="Add another school or degree">
+        <button
+          onClick={onAdd}
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#054d28] hover:underline"
+        >
+          <Plus className="size-4" />
+          Add education
+        </button>
+      </HintTip>
     </div>
   );
 }

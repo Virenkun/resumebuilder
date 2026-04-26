@@ -1,15 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse, RedirectResponse
 from app.config import get_settings
 from app.routers import resume, upload, enhance, compile, score
-import os
+from app.services.template_repository import get_template_repository
 
 settings = get_settings()
-
-# Create storage directory if it doesn't exist
-os.makedirs(settings.storage_path, exist_ok=True)
 
 app = FastAPI(
     title="AI Resume Builder API",
@@ -42,31 +38,25 @@ async def health_check():
     return {"status": "healthy"}
 
 
-# Template preview endpoint
-TEMPLATES_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "templates")
-
-TEMPLATES_META = [
-    {"id": "jakes_resume", "name": "Jake's Resume", "description": "Clean single-column, ATS-optimized. The most popular LaTeX resume template."},
-    {"id": "modern", "name": "Modern", "description": "Blue accent color, contemporary feel. Great for tech and creative roles."},
-    {"id": "classic", "name": "Classic", "description": "Traditional serif font, academic style. Ideal for research and corporate roles."},
-    {"id": "minimal", "name": "Minimal", "description": "Ultra-clean sans-serif with generous whitespace. Elegant and modern."},
-    {"id": "deedy", "name": "Deedy", "description": "Two-column layout with sidebar for skills and education. Inspired by the popular Deedy CV template."},
-]
-
-
 @app.get("/api/templates")
 async def list_templates():
-    """List all available templates with metadata"""
-    return {"templates": TEMPLATES_META}
+    """List all active templates (metadata only) from Supabase."""
+    repo = get_template_repository()
+    return {"templates": [m.public_dict() for m in repo.list_active()]}
 
 
 @app.get("/api/templates/{template_id}/preview")
 async def get_template_preview(template_id: str):
-    """Get preview PDF for a template"""
-    preview_path = os.path.join(TEMPLATES_DIR, template_id, "preview.pdf")
-    if not os.path.exists(preview_path):
-        raise HTTPException(status_code=404, detail="Preview not found")
-    return FileResponse(preview_path, media_type="application/pdf")
+    """Redirect to the CDN-served preview PDF in Supabase Storage."""
+    repo = get_template_repository()
+    return RedirectResponse(url=repo.get_preview_url(template_id), status_code=302)
+
+
+@app.get("/api/templates/{template_id}/thumbnail")
+async def get_template_thumbnail(template_id: str):
+    """Redirect to the CDN-served PNG thumbnail in Supabase Storage."""
+    repo = get_template_repository()
+    return RedirectResponse(url=repo.get_thumbnail_url(template_id), status_code=302)
 
 
 # Include routers

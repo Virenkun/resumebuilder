@@ -1,17 +1,20 @@
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
+BACKEND_ENV = Path(__file__).resolve().parents[1] / ".env"
+
 
 class Settings(BaseSettings):
-    # API Keys
-    anthropic_api_key: str
+    # OpenAI API
+    openai_api_key: str
 
     # Server Configuration
     backend_url: str = "http://localhost:8000"
     frontend_url: str = "http://localhost:5173"
 
     # Storage
-    storage_path: str = "./storage"
+    resume_artifact_bucket: str = "resume-artifacts"
 
     # File Upload
     max_file_size_mb: int = 10
@@ -21,14 +24,15 @@ class Settings(BaseSettings):
     latex_compile_timeout: int = 120
     latex_docker_image: str = "resumebuilder-latex-compiler"
 
-    # Claude API
-    claude_model: str = "claude-sonnet-4-6"
-    claude_max_tokens: int = 4096
-    claude_temperature: float = 0.7
+    # OpenAI settings
+    openai_model: str = "gpt-4o"
+    openai_max_tokens: int = 4096
+    openai_temperature: float = 0.7
 
     class Config:
-        env_file = ".env"
+        env_file = str(BACKEND_ENV)
         case_sensitive = False
+        extra = "ignore"
 
 
 @lru_cache()

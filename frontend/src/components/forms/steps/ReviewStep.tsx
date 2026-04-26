@@ -28,9 +28,9 @@ export default function ReviewStep({ onNext }: ReviewStepProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-        <p className="text-sm text-green-800">
-          <strong>Review your resume</strong> before continuing. You can go back to any step to make changes.
+      <div className="rounded-2xl border border-primary/40 bg-secondary/40 p-4">
+        <p className="text-sm text-[#054d28]">
+          <strong className="font-bold">Review your resume</strong> before continuing. You can go back to any step to make changes.
         </p>
       </div>
 
@@ -78,7 +78,7 @@ export default function ReviewStep({ onNext }: ReviewStepProps) {
       <Section title="Experience" isEmpty={experience.length === 0}>
         <div className="space-y-4">
           {experience.map((exp) => (
-            <div key={exp.id} className="border-l-2 border-green-300 pl-4">
+            <div key={exp.id} className="border-l-2 border-primary pl-4">
               <h4 className="font-semibold text-gray-900">{exp.position}</h4>
               <p className="text-sm text-gray-600">
                 {exp.company} &bull; {exp.location}
@@ -100,7 +100,7 @@ export default function ReviewStep({ onNext }: ReviewStepProps) {
       <Section title="Education" isEmpty={education.length === 0}>
         <div className="space-y-3">
           {education.map((edu) => (
-            <div key={edu.id} className="border-l-2 border-green-300 pl-4">
+            <div key={edu.id} className="border-l-2 border-primary pl-4">
               <h4 className="font-semibold text-gray-900">
                 {edu.degree} in {edu.field}
               </h4>
@@ -150,21 +150,21 @@ export default function ReviewStep({ onNext }: ReviewStepProps) {
       <Section title="Projects" isEmpty={projects.length === 0}>
         <div className="space-y-3">
           {projects.map((project) => (
-            <div key={project.id} className="border-l-2 border-green-300 pl-4">
+            <div key={project.id} className="border-l-2 border-primary pl-4">
               <h4 className="font-semibold text-gray-900">{project.name}</h4>
               <p className="text-sm text-gray-600 mt-1">{project.description}</p>
               <div className="flex flex-wrap gap-1 mt-1">
                 {project.technologies.map((tech, idx) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs"
+                    className="rounded bg-secondary px-2 py-0.5 text-xs font-semibold text-[#054d28]"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
               {project.link && (
-                <p className="text-xs text-green-700 mt-1">{project.link}</p>
+                <p className="text-xs text-[#054d28] mt-1">{project.link}</p>
               )}
             </div>
           ))}

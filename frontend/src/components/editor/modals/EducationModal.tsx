@@ -1,4 +1,5 @@
-import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SectionModal } from "../ui/SectionModal";
 
 export function EducationModal({
@@ -16,79 +17,71 @@ export function EducationModal({
 }) {
   return (
     <SectionModal
-      title={isEditing ? "Edit Education" : "Add Education"}
+      title={isEditing ? "Edit education" : "Add education"}
       onClose={onClose}
       onSave={onSave}
     >
       <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Institution
-          </label>
-          <input
-            value={draft.institution}
-            onChange={(e) =>
-              onChange({ ...draft, institution: e.target.value })
-            }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Degree
-          </label>
-          <input
-            value={draft.degree}
-            onChange={(e) => onChange({ ...draft, degree: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="e.g., Bachelor of Science"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Field of Study
-          </label>
-          <input
-            value={draft.field}
-            onChange={(e) => onChange({ ...draft, field: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Location
-          </label>
-          <input
-            value={draft.location}
-            onChange={(e) => onChange({ ...draft, location: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Graduation Date
-          </label>
-          <input
-            value={draft.graduation_date}
-            onChange={(e) =>
-              onChange({ ...draft, graduation_date: e.target.value })
-            }
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="YYYY-MM"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            GPA (optional)
-          </label>
-          <input
-            value={draft.gpa || ""}
-            onChange={(e) => onChange({ ...draft, gpa: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="3.8/4.0"
-          />
-        </div>
+        <Field
+          label="Institution"
+          className="col-span-2"
+          value={draft.institution}
+          onChange={(v) => onChange({ ...draft, institution: v })}
+        />
+        <Field
+          label="Degree"
+          value={draft.degree}
+          placeholder="e.g. Bachelor of Science"
+          onChange={(v) => onChange({ ...draft, degree: v })}
+        />
+        <Field
+          label="Field of study"
+          value={draft.field}
+          onChange={(v) => onChange({ ...draft, field: v })}
+        />
+        <Field
+          label="Location"
+          value={draft.location}
+          onChange={(v) => onChange({ ...draft, location: v })}
+        />
+        <Field
+          label="Graduation date"
+          value={draft.graduation_date}
+          placeholder="YYYY-MM"
+          onChange={(v) => onChange({ ...draft, graduation_date: v })}
+        />
+        <Field
+          label="GPA (optional)"
+          value={draft.gpa || ""}
+          placeholder="3.8/4.0"
+          onChange={(v) => onChange({ ...draft, gpa: v })}
+        />
       </div>
     </SectionModal>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  placeholder,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`space-y-1.5 ${className}`}>
+      <Label>{label}</Label>
+      <Input
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </div>
   );
 }

@@ -1,22 +1,20 @@
-import React from "react";
-
 export function SkillsSection({ skills }: { skills: any }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {(["technical", "languages", "frameworks", "tools"] as const).map(
         (cat) => {
           const items = skills[cat];
           if (!items?.length) return null;
           return (
             <div key={cat}>
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 {cat}
               </span>
-              <div className="flex flex-wrap gap-1.5 mt-1">
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {items.map((skill: string, idx: number) => (
                   <span
                     key={idx}
-                    className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs"
+                    className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold text-[#054d28]"
                   >
                     {skill}
                   </span>

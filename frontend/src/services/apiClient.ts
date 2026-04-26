@@ -1,4 +1,5 @@
 import axios from "axios";
+import { supabase } from "../lib/supabase";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
@@ -7,31 +8,38 @@ const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  timeout: 30000,
+  timeout: 120000,
 });
 
-// Request interceptor for adding auth tokens (if needed later)
 apiClient.interceptors.request.use(
-  (config) => {
-    // Add auth token here if needed
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+  async (config) => {
+    const { data } = await supabase.auth.getSession();
+    const token = data.session?.access_token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     return config;
   },
   (error) => Promise.reject(error),
 );
 
-// Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response) {
-      // Server responded with error
       console.error("API Error:", error.response.data);
+      if (error.response.status === 401) {
+        await supabase.auth.signOut();
+        if (
+          typeof window !== "undefined" &&
+          !window.location.pathname.startsWith("/login") &&
+          !window.location.pathname.startsWith("/signup") &&
+          window.location.pathname !== "/"
+        ) {
+          window.location.assign("/login");
+        }
+      }
     } else if (error.request) {
-      // Request made but no response
       console.error("Network Error:", error.message);
     } else {
       console.error("Error:", error.message);

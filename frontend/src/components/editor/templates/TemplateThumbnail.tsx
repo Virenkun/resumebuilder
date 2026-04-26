@@ -1,35 +1,28 @@
-import { Document, Page } from "react-pdf";
-import { usePdfBlobUrl } from "./usePdfBlobUrl";
+import { useState } from "react";
+import apiClient from "../../../services/apiClient";
 
 export function TemplateThumbnail({ templateId }: { templateId: string }) {
-  const { blobUrl, error } = usePdfBlobUrl(templateId);
+  const [errored, setErrored] = useState(false);
+  const baseUrl = apiClient.defaults.baseURL || "http://localhost:8000";
+  const src = `${baseUrl}/api/templates/${templateId}/thumbnail`;
 
-  if (error) {
+  if (errored) {
     return (
-      <div className="h-44 flex items-center justify-center bg-gray-50">
+      <div className="flex h-44 w-full items-center justify-center bg-gray-50">
         <p className="text-xs text-gray-400">Preview unavailable</p>
       </div>
     );
   }
 
-  if (!blobUrl) {
-    return (
-      <div className="h-44 flex items-center justify-center bg-gray-50">
-        <p className="text-xs text-gray-400">Loading...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="h-44 overflow-hidden flex justify-center bg-white">
-      <Document file={blobUrl} loading="">
-        <Page
-          pageNumber={1}
-          width={220}
-          renderTextLayer={false}
-          renderAnnotationLayer={false}
-        />
-      </Document>
+    <div className="h-44 w-full overflow-hidden bg-white">
+      <img
+        src={src}
+        alt={`${templateId} template preview`}
+        loading="lazy"
+        onError={() => setErrored(true)}
+        className="h-full w-full object-cover object-top"
+      />
     </div>
   );
 }

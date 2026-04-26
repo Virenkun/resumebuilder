@@ -1,11 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AlertCircle, Download, FileCheck, Loader2 } from "lucide-react";
 import useResumeStore from "../store/resumeStore";
 import apiClient from "../services/apiClient";
 import { EditTab } from "../components/editor/tabs/EditTab";
 import { ScoreTab } from "../components/editor/tabs/ScoreTab";
 import { TemplateSidebar } from "../components/editor/sidebar/TemplateSidebar";
 import { TemplatePreviewModal } from "../components/editor/templates/TemplatePreviewModal";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 interface TemplateInfo {
   id: string;
@@ -27,7 +32,6 @@ export default function Editor() {
   const [previewTemplate, setPreviewTemplate] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load templates list
     apiClient
       .get("/api/templates")
       .then((res) => {
@@ -36,28 +40,11 @@ export default function Editor() {
         }
       })
       .catch(() => {
-        // Fallback templates
         setTemplates([
-          {
-            id: "jakes_resume",
-            name: "Jake's Resume",
-            description: "Clean single-column, ATS-optimized.",
-          },
-          {
-            id: "modern",
-            name: "Modern",
-            description: "Blue accent color, contemporary feel.",
-          },
-          {
-            id: "classic",
-            name: "Classic",
-            description: "Traditional serif font, academic style.",
-          },
-          {
-            id: "minimal",
-            name: "Minimal",
-            description: "Ultra-clean sans-serif, generous whitespace.",
-          },
+          { id: "jakes_resume", name: "Jake's Resume", description: "Clean single-column, ATS-optimized." },
+          { id: "modern", name: "Modern", description: "Blue accent color, contemporary feel." },
+          { id: "classic", name: "Classic", description: "Traditional serif font, academic style." },
+          { id: "minimal", name: "Minimal", description: "Ultra-clean sans-serif, generous whitespace." },
         ]);
       });
   }, []);
@@ -77,23 +64,14 @@ export default function Editor() {
 
   if (!currentResume) {
     return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          background: "linear-gradient(135deg, #f8f5f0 0%, #e8f5e9 100%)",
-        }}
-      >
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="mb-4 text-base" style={{ color: "#6d4c41" }}>
+          <p className="mb-4 text-sm text-muted-foreground">
             No resume data found.
           </p>
-          <button
-            onClick={() => navigate("/create?mode=form")}
-            className="px-6 py-2.5 rounded-xl text-white font-semibold cursor-pointer"
-            style={{ background: "#2e7d32" }}
-          >
-            Create Resume
-          </button>
+          <Button onClick={() => navigate("/create?mode=form")}>
+            Create resume
+          </Button>
         </div>
       </div>
     );
@@ -103,15 +81,11 @@ export default function Editor() {
     setCompileStatus("compiling");
     setError(null);
     try {
-      // First save the resume
       await apiClient.post("/api/resume/create", currentResume);
-
-      // Then compile
       const res = await apiClient.post("/api/compile", {
         resume_id: currentResume.id,
         template: selectedTemplate,
       });
-
       if (res.data.success) {
         setCompileStatus("success");
         navigate(`/preview/${currentResume.id}`);
@@ -129,14 +103,11 @@ export default function Editor() {
     setScoring(true);
     setError(null);
     try {
-      // Save first
       await apiClient.post("/api/resume/create", currentResume);
-
       const res = await apiClient.post("/api/score", {
         resume_id: currentResume.id,
         job_description: jobDescription || null,
       });
-
       setScoreData(res.data);
     } catch (err: any) {
       const detail = err.response?.data?.detail;
@@ -151,195 +122,129 @@ export default function Editor() {
 
   const handleDownloadLatex = async () => {
     try {
-      // Save and compile first to generate .tex
       await apiClient.post("/api/resume/create", currentResume);
       await apiClient.post("/api/compile", {
         resume_id: currentResume.id,
         template: selectedTemplate,
       });
-
       window.open(
         `${apiClient.defaults.baseURL}/api/download/latex/${currentResume.id}`,
         "_blank",
       );
-    } catch (err: any) {
+    } catch {
       setError("Failed to generate LaTeX file");
     }
   };
 
+  const stats: Array<{ label: string; value: string | number; tone?: "score" }> = [
+    { label: "Exp", value: currentResume.experience.length },
+    { label: "Edu", value: currentResume.education.length },
+    { label: "Skills", value: Object.values(currentResume.skills).flat().length },
+    { label: "Projects", value: currentResume.projects.length },
+  ];
+  if (scoreData) {
+    stats.push({ label: "ATS", value: `${scoreData.score}/100`, tone: "score" });
+  }
+
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        background: "linear-gradient(135deg, #f8f5f0 0%, #e8f5e9 100%)",
-      }}
-    >
-      {/* Fixed Header */}
-      <div
-        style={{
-          flexShrink: 0,
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          background: "rgba(255,255,255,0.90)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(153,246,228,0.40)",
-          boxShadow: "0 1px 12px rgba(46,125,50,0.08)",
-        }}
-      >
-        <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
+    <div className="flex h-screen flex-col bg-background">
+      <header className="sticky top-0 z-50 flex-shrink-0 border-b border-[rgba(14,15,12,0.08)] bg-card/80 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3.5">
           <div>
-            <h1
-              className="text-xl font-extrabold tracking-tight"
-              style={{ color: "#1b5e20" }}
-            >
-              Resume Editor
-            </h1>
-            <p className="text-xs mt-0.5" style={{ color: "#6d4c41" }}>
-              {currentResume.personal.name || "Untitled Resume"}
+            <h1 className="font-display text-xl text-foreground">Resume editor</h1>
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              {currentResume.personal.name || "Untitled resume"}
             </p>
           </div>
 
-          {/* Compact stats strip */}
-          <div className="hidden lg:flex items-center gap-1">
-            {[
-              { label: "Exp", value: currentResume.experience.length },
-              { label: "Edu", value: currentResume.education.length },
-              { label: "Skills", value: Object.values(currentResume.skills).flat().length },
-              { label: "Projects", value: currentResume.projects.length },
-              ...(scoreData
-                ? [{ label: "ATS", value: `${scoreData.score}/100`, highlight: true, score: scoreData.score }]
-                : []),
-            ].map((stat: any) => (
+          <div className="hidden items-center gap-1.5 lg:flex">
+            {stats.map((s) => (
               <div
-                key={stat.label}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
-                style={{ background: "rgba(13,148,136,0.06)", border: "1px solid rgba(153,246,228,0.5)" }}
+                key={s.label}
+                className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1"
               >
-                <span className="text-xs" style={{ color: "#6d4c41" }}>{stat.label}</span>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                  {s.label}
+                </span>
                 <span
-                  className="text-xs font-bold"
-                  style={{
-                    color: stat.highlight
-                      ? stat.score >= 80 ? "#16a34a" : stat.score >= 60 ? "#ca8a04" : "#dc2626"
-                      : "#2e7d32",
-                  }}
+                  className={cn(
+                    "text-xs font-bold",
+                    s.tone === "score"
+                      ? "text-[#054d28]"
+                      : "text-foreground",
+                  )}
                 >
-                  {stat.value}
+                  {s.value}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="flex gap-2.5">
-            <button
-              onClick={handleDownloadLatex}
-              className="px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer"
-              style={{
-                border: "1.5px solid #e0d6c9",
-                color: "#475569",
-                background: "white",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "#f8f5f0";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background = "white";
-              }}
-            >
-              Download .tex
-            </button>
-            <button
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleDownloadLatex}>
+              <Download className="size-4" />
+              .tex
+            </Button>
+            <Button
               onClick={handleCompile}
               disabled={compileStatus === "compiling"}
-              className="px-5 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-60 cursor-pointer"
-              style={{ background: "#2e7d32" }}
+              size="sm"
             >
-              {compileStatus === "compiling"
-                ? "Compiling…"
-                : "Compile & Preview PDF"}
-            </button>
+              {compileStatus === "compiling" ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Compiling…
+                </>
+              ) : (
+                <>
+                  <FileCheck className="size-4" />
+                  Compile & preview
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
-        {/* Error Banner inside header area */}
         {error && (
-          <div className="max-w-7xl mx-auto px-4 pb-3">
-            <div
-              className="rounded-xl p-3 flex justify-between items-center"
-              style={{ background: "#fef2f2", border: "1px solid #fecaca" }}
-            >
-              <p className="text-sm" style={{ color: "#b91c1c" }}>
-                {error}
-              </p>
+          <div className="mx-auto max-w-7xl px-6 pb-3">
+            <div className="flex items-center justify-between gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 px-4 py-3">
+              <div className="flex items-center gap-2 text-sm text-destructive">
+                <AlertCircle className="size-4 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
               <button
                 onClick={() => setError(null)}
-                className="text-sm font-medium cursor-pointer"
-                style={{ color: "#ef4444" }}
+                className="text-xs font-semibold text-destructive hover:underline"
               >
                 Dismiss
               </button>
             </div>
           </div>
         )}
-      </div>
+      </header>
 
-      {/* Scrollable body — each column scrolls independently */}
-      <div style={{ flex: 1, overflow: "hidden" }}>
-        <div
-          style={{
-            height: "100%",
-            maxWidth: "80rem",
-            margin: "0 auto",
-            padding: "0 1rem",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            gap: "1.5rem",
-          }}
-        >
-          {/* Left: Tabs + Resume Sections (2 cols wide) */}
-          <div
-            className="editor-scroll"
-            style={{
-              gridColumn: "span 2",
-              overflowY: "auto",
-              paddingTop: "1.5rem",
-              paddingBottom: "1.5rem",
-              paddingRight: "0.5rem",
-            }}
-          >
-            {/* Tabs */}
-            <div
-              className="flex gap-1 mb-6 rounded-xl p-1 w-fit"
-              style={{ background: "rgba(46,125,50,0.08)" }}
+      <div className="flex-1 overflow-hidden">
+        <div className="mx-auto grid h-full max-w-7xl gap-6 px-4 md:grid-cols-3">
+          <div className="editor-scroll col-span-2 overflow-y-auto py-6 pr-2">
+            <Tabs
+              value={activeTab}
+              onValueChange={(v) => setActiveTab(v as "edit" | "score")}
             >
-              {(["edit", "score"] as const).map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className="px-4 py-2 rounded-lg text-sm font-semibold transition-all cursor-pointer"
-                  style={{
-                    background: activeTab === tab ? "#ffffff" : "transparent",
-                    color: activeTab === tab ? "#2e7d32" : "#6d4c41",
-                    boxShadow:
-                      activeTab === tab
-                        ? "0 1px 4px rgba(0,0,0,0.08)"
-                        : "none",
-                  }}
-                >
-                  {tab === "edit" ? "Edit Resume" : "ATS Score"}
-                </button>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              {activeTab === "edit" && (
+              <TabsList className="mb-6">
+                <TabsTrigger value="edit">Edit resume</TabsTrigger>
+                <TabsTrigger value="score">
+                  ATS score
+                  {scoreData && (
+                    <Badge variant="secondary" className="ml-2">
+                      {scoreData.score}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="edit">
                 <EditTab resume={currentResume} updateResume={updateResume} />
-              )}
-              {activeTab === "score" && (
+              </TabsContent>
+              <TabsContent value="score">
                 <ScoreTab
                   scoreData={scoreData}
                   scoring={scoring}
@@ -347,19 +252,11 @@ export default function Editor() {
                   setJobDescription={setJobDescription}
                   onScore={handleScore}
                 />
-              )}
-            </div>
+              </TabsContent>
+            </Tabs>
           </div>
 
-          {/* Right: Templates + Stats (1 col, independent scroll) */}
-          <div
-            className="editor-scroll"
-            style={{
-              overflowY: "auto",
-              paddingTop: "1.5rem",
-              paddingBottom: "1.5rem",
-            }}
-          >
+          <div className="editor-scroll overflow-y-auto py-6">
             <TemplateSidebar
               templates={templates}
               selectedTemplate={selectedTemplate}
@@ -369,7 +266,6 @@ export default function Editor() {
                 setPreviewTemplate(previewTemplate === id ? null : id)
               }
             />
-
             {previewTemplate && (
               <TemplatePreviewModal
                 templateId={previewTemplate}

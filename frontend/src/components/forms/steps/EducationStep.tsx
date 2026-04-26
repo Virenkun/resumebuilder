@@ -91,7 +91,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
                   <button
                     type="button"
                     onClick={() => handleEdit(edu)}
-                    className="text-green-700 hover:text-green-800 text-sm font-medium"
+                    className="text-sm font-semibold text-[#054d28] hover:text-[#163300]"
                   >
                     Edit
                   </button>
@@ -123,7 +123,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
             type="text"
             value={formData.institution}
             onChange={(e) => handleChange('institution', e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
               errors.institution ? 'border-red-500' : 'border-gray-300'
             }`}
             placeholder="Stanford University"
@@ -140,7 +140,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
               type="text"
               value={formData.degree}
               onChange={(e) => handleChange('degree', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.degree ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Bachelor of Science"
@@ -156,7 +156,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
               type="text"
               value={formData.field}
               onChange={(e) => handleChange('field', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.field ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Computer Science"
@@ -174,7 +174,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
               type="text"
               value={formData.location}
               onChange={(e) => handleChange('location', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.location ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Palo Alto, CA"
@@ -190,7 +190,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
               type="text"
               value={formData.graduation_date}
               onChange={(e) => handleChange('graduation_date', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.graduation_date ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="2024-05"
@@ -208,7 +208,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
             type="text"
             value={formData.gpa || ''}
             onChange={(e) => handleChange('gpa', e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
             placeholder="3.8/4.0"
           />
         </div>
@@ -216,7 +216,7 @@ export default function EducationStep({ onNext }: EducationStepProps) {
         <button
           type="button"
           onClick={handleSave}
-          className="px-4 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800"
+          className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-bold text-[#163300] transition-transform hover:scale-[1.05] active:scale-[0.95]"
         >
           {editingId ? 'Update' : 'Add'} Education
         </button>

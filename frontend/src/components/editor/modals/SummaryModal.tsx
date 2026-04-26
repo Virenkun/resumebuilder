@@ -1,4 +1,4 @@
-import React from "react";
+import { Textarea } from "@/components/ui/textarea";
 import { SectionModal } from "../ui/SectionModal";
 
 export function SummaryModal({
@@ -18,20 +18,20 @@ export function SummaryModal({
 }) {
   return (
     <SectionModal
-      title="Edit Summary"
+      title="Edit summary"
       onClose={onClose}
       onSave={onSave}
       onEnhance={onEnhance}
       enhancing={enhancing}
     >
-      <textarea
+      <Textarea
         value={draft}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-        rows={5}
-        placeholder="Write a brief professional summary (2-3 sentences)..."
+        rows={6}
+        placeholder="Write a brief professional summary (2–3 sentences)…"
+        className="min-h-32"
       />
-      <p className="text-xs text-gray-400">
+      <p className="text-xs text-muted-foreground">
         Use AI Enhance to improve clarity, impact, and professionalism.
       </p>
     </SectionModal>

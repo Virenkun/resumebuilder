@@ -65,6 +65,7 @@ class ResumeMetadata(BaseModel):
 
 class Resume(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
+    user_id: Optional[str] = None
     personal: PersonalInfo
     summary: Optional[str] = None
     experience: List[Experience] = Field(default_factory=list)

@@ -54,7 +54,7 @@ Return ONLY the JSON array of enhanced bullets in the same order, no markdown, n
 """
 
 TAILOR_TO_JD_PROMPT = """
-Tailor this resume to match the job description:
+Tailor this resume to match the job description and explain why each section changed.
 
 Job Description:
 {jd_text}
@@ -66,11 +66,26 @@ Instructions:
 - Reorder and emphasize experience bullets that match job requirements
 - Incorporate relevant keywords naturally from the job description
 - Adjust skills section to highlight matching technologies
-- Reorder sections for relevance if needed
 - Keep all content truthful (no fabrication or exaggeration)
-- Maintain the same JSON structure
+- PRESERVE every existing `id` field exactly as it appears in the input resume
+- Maintain the same JSON structure for the resume
+- For each section/entry you change, write a short rationale (1-2 sentences) that
+  cites the specific JD signal you matched (e.g. "Promoted Python bullets to the
+  top because the JD requires '2+ years of Python'").
+- If a section/entry is unchanged, omit its key from the rationale object.
 
-Return the updated resume as JSON with no markdown formatting:
+Return ONLY valid JSON in this exact shape, with no markdown:
+{{
+  "resume": {{ ...the updated resume, same schema as input... }},
+  "rationale": {{
+    "summary": "why summary changed",
+    "experience": {{ "<experience id>": "why this entry changed" }},
+    "skills": "why skills changed",
+    "projects": {{ "<project id>": "why this project changed" }},
+    "education": "why education changed",
+    "certifications": "why certifications changed"
+  }}
+}}
 """
 
 GENERATE_FROM_JD_PROMPT = """

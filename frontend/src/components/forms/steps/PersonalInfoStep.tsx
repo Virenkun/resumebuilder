@@ -55,7 +55,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
           type="text"
           value={formData.name}
           onChange={(e) => handleChange("name", e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
             errors.name ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="John Doe"
@@ -75,7 +75,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             type="email"
             value={formData.email}
             onChange={(e) => handleChange("email", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.email ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="john@example.com"
@@ -93,7 +93,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             type="tel"
             value={formData.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.phone ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="(123) 456-7890"
@@ -113,7 +113,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
           type="text"
           value={formData.location}
           onChange={(e) => handleChange("location", e.target.value)}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
             errors.location ? "border-red-500" : "border-gray-300"
           }`}
           placeholder="San Francisco, CA"
@@ -137,7 +137,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             type="url"
             value={formData.linkedin || ""}
             onChange={(e) => handleChange("linkedin", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.linkedin ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="https://linkedin.com/in/johndoe"
@@ -156,7 +156,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             type="url"
             value={formData.github || ""}
             onChange={(e) => handleChange("github", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.github ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="https://github.com/johndoe"
@@ -175,7 +175,7 @@ export default function PersonalInfoStep({ onNext }: PersonalInfoStepProps) {
             type="url"
             value={formData.website || ""}
             onChange={(e) => handleChange("website", e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent ${
               errors.website ? "border-red-500" : "border-gray-300"
             }`}
             placeholder="https://johndoe.com"

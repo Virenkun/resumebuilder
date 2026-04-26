@@ -1,0 +1,10 @@
+export { Header } from "./Header";
+export { Hero } from "./Hero";
+export { LogoMarquee } from "./LogoMarquee";
+export { HowItWorks } from "./HowItWorks";
+export { Why } from "./Why";
+export { Pricing } from "./Pricing";
+export { Testimonials } from "./Testimonials";
+export { FAQ } from "./FAQ";
+export { FinalCta } from "./FinalCta";
+export { Footer } from "./Footer";

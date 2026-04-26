@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, UploadFile, File
-from app.services.claude_service import get_claude_service
-from app.models.resume import Resume
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from app.services.ai_service import get_ai_service
+from app.services import resume_storage, resume_artifacts
+from app.models.user import User
+from app.deps.auth import get_current_user
 from app.config import get_settings
 import json
-import os
 import logging
 from uuid import uuid4
 
@@ -101,10 +102,11 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
 
 
 @router.post("/upload/resume")
-async def upload_resume(file: UploadFile = File(...)):
+async def upload_resume(
+    file: UploadFile = File(...), user: User = Depends(get_current_user)
+):
     """Upload and parse resume (PDF/DOCX) using AI"""
     try:
-        # Validate file type
         content_type = file.content_type or ""
         filename = file.filename or ""
 
@@ -121,10 +123,8 @@ async def upload_resume(file: UploadFile = File(...)):
                 detail="Only PDF and DOCX files are supported",
             )
 
-        # Read file
         file_bytes = await file.read()
 
-        # Check file size
         max_size = settings.max_file_size_mb * 1024 * 1024
         if len(file_bytes) > max_size:
             raise HTTPException(
@@ -132,11 +132,7 @@ async def upload_resume(file: UploadFile = File(...)):
                 detail=f"File size exceeds {settings.max_file_size_mb}MB limit",
             )
 
-        # Extract text
-        if is_pdf:
-            text = extract_text_from_pdf(file_bytes)
-        else:
-            text = extract_text_from_docx(file_bytes)
+        text = extract_text_from_pdf(file_bytes) if is_pdf else extract_text_from_docx(file_bytes)
 
         if not text.strip():
             raise HTTPException(
@@ -146,37 +142,43 @@ async def upload_resume(file: UploadFile = File(...)):
 
         logger.info(f"Extracted {len(text)} characters from uploaded file")
 
-        # Parse with Claude
-        service = get_claude_service()
+        service = get_ai_service()
         result = await service.parse_resume(text, RESUME_SCHEMA)
 
-        parsed = json.loads(result)
+        try:
+            parsed = json.loads(result)
+        except json.JSONDecodeError as e:
+            logger.error(
+                "Parse-resume response was not valid JSON (%s). First 1000 chars:\n%s",
+                e,
+                (result or "")[:1000],
+            )
+            raise
 
-        # Ensure it has an ID
         resume_id = str(uuid4())
         parsed["id"] = resume_id
+        parsed["user_id"] = user.id
 
-        # Ensure IDs on nested items
-        for i, exp in enumerate(parsed.get("experience", [])):
+        for exp in parsed.get("experience", []):
             if not exp.get("id"):
                 exp["id"] = str(uuid4())
-        for i, edu in enumerate(parsed.get("education", [])):
+        for edu in parsed.get("education", []):
             if not edu.get("id"):
                 edu["id"] = str(uuid4())
-        for i, proj in enumerate(parsed.get("projects", [])):
+        for proj in parsed.get("projects", []):
             if not proj.get("id"):
                 proj["id"] = str(uuid4())
 
-        # Save to storage
-        resume_dir = os.path.join(settings.storage_path, resume_id)
-        os.makedirs(resume_dir, exist_ok=True)
+        resume_storage.save_resume(user.id, resume_id, parsed)
 
-        with open(os.path.join(resume_dir, "data.json"), "w") as f:
-            json.dump(parsed, f, indent=2)
-
-        # Save original text for reference
-        with open(os.path.join(resume_dir, "original.txt"), "w") as f:
-            f.write(text)
+        # Save original extracted text as a storage artifact for reference.
+        resume_artifacts.upload_artifact(
+            user.id,
+            resume_id,
+            "original.txt",
+            text.encode("utf-8"),
+            content_type="text/plain; charset=utf-8",
+        )
 
         return {
             "success": True,

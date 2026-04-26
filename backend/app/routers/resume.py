@@ -1,98 +1,82 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from app.models.resume import Resume
-from app.models.responses import ResumeResponse, ErrorResponse
-from app.config import get_settings
-import json
-import os
-from typing import Optional
+from app.models.responses import ResumeResponse
+from app.models.user import User
+from app.deps.auth import get_current_user
+from app.services import resume_storage
 
 router = APIRouter()
-settings = get_settings()
+
+
+@router.get("/resumes")
+async def list_resumes(user: User = Depends(get_current_user)):
+    """List all resumes for the authenticated user."""
+    items = []
+    for data in resume_storage.iter_user_resumes(user.id):
+        personal = data.get("personal") or {}
+        metadata = data.get("metadata") or {}
+        items.append(
+            {
+                "id": data.get("id"),
+                "name": personal.get("name", "") or "Untitled",
+                "template": metadata.get("template", "jakes_resume"),
+                "last_modified": metadata.get("last_modified"),
+                "ats_score": metadata.get("ats_score"),
+            }
+        )
+    return {"resumes": items}
 
 
 @router.post("/resume/create", response_model=ResumeResponse)
-async def create_resume(resume: Resume):
+async def create_resume(
+    resume: Resume, user: User = Depends(get_current_user)
+):
     """Create a new resume from form data"""
     try:
-        # Save resume to storage
-        resume_dir = os.path.join(settings.storage_path, resume.id)
-        os.makedirs(resume_dir, exist_ok=True)
-
-        resume_file = os.path.join(resume_dir, "data.json")
-        with open(resume_file, "w") as f:
-            json.dump(resume.model_dump(), f, indent=2)
+        resume.user_id = user.id
+        resume_storage.save_resume(user.id, resume.id, resume.model_dump())
 
         return ResumeResponse(
             success=True,
             message="Resume created successfully",
-            resume=resume
+            resume=resume,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/resume/{resume_id}", response_model=ResumeResponse)
-async def get_resume(resume_id: str):
-    """Get resume by ID"""
-    try:
-        resume_file = os.path.join(settings.storage_path, resume_id, "data.json")
-
-        if not os.path.exists(resume_file):
-            raise HTTPException(status_code=404, detail="Resume not found")
-
-        with open(resume_file, "r") as f:
-            resume_data = json.load(f)
-
-        resume = Resume(**resume_data)
-        return ResumeResponse(
-            success=True,
-            message="Resume retrieved successfully",
-            resume=resume
-        )
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def get_resume(
+    resume_id: str, user: User = Depends(get_current_user)
+):
+    """Get resume by ID (must be owned by the authenticated user)."""
+    data = resume_storage.load_resume_or_404(user.id, resume_id)
+    resume = Resume(**data)
+    return ResumeResponse(
+        success=True, message="Resume retrieved successfully", resume=resume
+    )
 
 
 @router.put("/resume/{resume_id}", response_model=ResumeResponse)
-async def update_resume(resume_id: str, resume: Resume):
-    """Update existing resume"""
-    try:
-        resume_dir = os.path.join(settings.storage_path, resume_id)
-
-        if not os.path.exists(resume_dir):
-            raise HTTPException(status_code=404, detail="Resume not found")
-
-        resume_file = os.path.join(resume_dir, "data.json")
-        with open(resume_file, "w") as f:
-            json.dump(resume.model_dump(), f, indent=2)
-
-        return ResumeResponse(
-            success=True,
-            message="Resume updated successfully",
-            resume=resume
-        )
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def update_resume(
+    resume_id: str,
+    resume: Resume,
+    user: User = Depends(get_current_user),
+):
+    """Update existing resume (must be owned by the authenticated user)."""
+    # Ownership check — raises 403 if another user owns it
+    resume_storage.load_resume_or_404(user.id, resume_id)
+    resume.user_id = user.id
+    resume_storage.save_resume(user.id, resume_id, resume.model_dump())
+    return ResumeResponse(
+        success=True, message="Resume updated successfully", resume=resume
+    )
 
 
 @router.delete("/resume/{resume_id}")
-async def delete_resume(resume_id: str):
-    """Delete resume"""
-    try:
-        resume_dir = os.path.join(settings.storage_path, resume_id)
-
-        if not os.path.exists(resume_dir):
-            raise HTTPException(status_code=404, detail="Resume not found")
-
-        import shutil
-        shutil.rmtree(resume_dir)
-
-        return {"success": True, "message": "Resume deleted successfully"}
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+async def delete_resume(
+    resume_id: str, user: User = Depends(get_current_user)
+):
+    """Delete resume (must be owned by the authenticated user)."""
+    resume_storage.delete_resume(user.id, resume_id)
+    return {"success": True, "message": "Resume deleted successfully"}

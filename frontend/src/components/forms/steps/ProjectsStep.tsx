@@ -94,9 +94,9 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          <strong>Tip:</strong> Projects are optional but highly recommended for students and early-career professionals. Include personal projects, open-source contributions, or academic projects.
+      <div className="rounded-2xl border border-primary/40 bg-secondary/40 p-4">
+        <p className="text-sm text-[#054d28]">
+          <strong className="font-bold">Tip:</strong> Projects are optional but highly recommended for students and early-career professionals. Include personal projects, open-source contributions, or academic projects.
         </p>
       </div>
 
@@ -107,7 +107,7 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="border border-gray-200 rounded-lg p-4 hover:border-green-300 transition-colors"
+              className="shadow-ring rounded-2xl bg-card p-4 transition-colors hover:shadow-ring-green"
             >
               <div className="flex justify-between items-start">
                 <div className="flex-1">
@@ -117,21 +117,21 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
                     {project.technologies.map((tech, idx) => (
                       <span
                         key={idx}
-                        className="px-2 py-0.5 bg-green-100 text-green-800 rounded text-xs"
+                        className="rounded bg-secondary px-2 py-0.5 text-xs font-semibold text-[#054d28]"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
                   {project.link && (
-                    <p className="text-sm text-green-700 mt-1">{project.link}</p>
+                    <p className="mt-1 text-sm text-[#054d28]">{project.link}</p>
                   )}
                 </div>
                 <div className="flex gap-2 ml-4">
                   <button
                     type="button"
                     onClick={() => handleEdit(project)}
-                    className="text-green-700 hover:text-green-800 text-sm font-medium"
+                    className="text-sm font-semibold text-[#054d28] hover:text-[#163300]"
                   >
                     Edit
                   </button>
@@ -165,7 +165,7 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
               type="text"
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.name ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="E-commerce Platform"
@@ -181,7 +181,7 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
             <textarea
               value={formData.description}
               onChange={(e) => handleChange('description', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.description ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="Built a full-stack e-commerce platform with user authentication, product catalog, and payment processing..."
@@ -201,13 +201,13 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
                 value={newTech}
                 onChange={(e) => setNewTech(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"
                 placeholder="e.g., React, Node.js, PostgreSQL..."
               />
               <button
                 type="button"
                 onClick={addTechnology}
-                className="px-4 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800"
+                className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-bold text-[#163300] transition-transform hover:scale-[1.05] active:scale-[0.95]"
               >
                 Add
               </button>
@@ -216,13 +216,13 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
               {formData.technologies?.map((tech, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
+                  className="inline-flex items-center gap-1 rounded-full bg-secondary px-3 py-1 text-sm font-semibold text-[#054d28]"
                 >
                   {tech}
                   <button
                     type="button"
                     onClick={() => removeTechnology(index)}
-                    className="hover:text-green-900"
+                    className="hover:text-[#163300]"
                   >
                     ✕
                   </button>
@@ -241,7 +241,7 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
               type="text"
               value={formData.link}
               onChange={(e) => handleChange('link', e.target.value)}
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 ${
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary ${
                 errors.link ? 'border-red-500' : 'border-gray-300'
               }`}
               placeholder="https://github.com/username/project"
@@ -254,7 +254,7 @@ export default function ProjectsStep({ onNext }: ProjectsStepProps) {
             <button
               type="button"
               onClick={handleSave}
-              className="px-4 py-2 bg-green-700 text-white rounded-lg font-medium hover:bg-green-800"
+              className="inline-flex items-center rounded-full bg-primary px-4 py-2 text-sm font-bold text-[#163300] transition-transform hover:scale-[1.05] active:scale-[0.95]"
             >
               {editingId ? 'Update' : 'Add'} Project
             </button>

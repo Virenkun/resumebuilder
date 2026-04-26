@@ -1,4 +1,5 @@
-import React from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { SectionModal } from "../ui/SectionModal";
 
 export function PersonalInfoModal({
@@ -13,83 +14,79 @@ export function PersonalInfoModal({
   onSave: () => void;
 }) {
   return (
-    <SectionModal title="Edit Personal Info" onClose={onClose} onSave={onSave}>
+    <SectionModal title="Edit personal info" onClose={onClose} onSave={onSave}>
       <div className="grid grid-cols-2 gap-4">
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
-          </label>
-          <input
-            value={draft.name}
-            onChange={(e) => onChange({ ...draft, name: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            value={draft.email}
-            onChange={(e) => onChange({ ...draft, email: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Phone
-          </label>
-          <input
-            value={draft.phone}
-            onChange={(e) => onChange({ ...draft, phone: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Location
-          </label>
-          <input
-            value={draft.location}
-            onChange={(e) => onChange({ ...draft, location: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            LinkedIn
-          </label>
-          <input
-            value={draft.linkedin || ""}
-            onChange={(e) => onChange({ ...draft, linkedin: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="linkedin.com/in/..."
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            GitHub
-          </label>
-          <input
-            value={draft.github || ""}
-            onChange={(e) => onChange({ ...draft, github: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="github.com/..."
-          />
-        </div>
-        <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Website
-          </label>
-          <input
-            value={draft.website || ""}
-            onChange={(e) => onChange({ ...draft, website: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            placeholder="yoursite.com"
-          />
-        </div>
+        <Field
+          label="Full name"
+          className="col-span-2"
+          value={draft.name}
+          onChange={(v) => onChange({ ...draft, name: v })}
+        />
+        <Field
+          label="Email"
+          type="email"
+          value={draft.email}
+          onChange={(v) => onChange({ ...draft, email: v })}
+        />
+        <Field
+          label="Phone"
+          value={draft.phone}
+          onChange={(v) => onChange({ ...draft, phone: v })}
+        />
+        <Field
+          label="Location"
+          className="col-span-2"
+          value={draft.location}
+          onChange={(v) => onChange({ ...draft, location: v })}
+        />
+        <Field
+          label="LinkedIn"
+          value={draft.linkedin || ""}
+          placeholder="linkedin.com/in/…"
+          onChange={(v) => onChange({ ...draft, linkedin: v })}
+        />
+        <Field
+          label="GitHub"
+          value={draft.github || ""}
+          placeholder="github.com/…"
+          onChange={(v) => onChange({ ...draft, github: v })}
+        />
+        <Field
+          label="Website"
+          className="col-span-2"
+          value={draft.website || ""}
+          placeholder="yoursite.com"
+          onChange={(v) => onChange({ ...draft, website: v })}
+        />
       </div>
     </SectionModal>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  placeholder,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  placeholder?: string;
+  className?: string;
+}) {
+  return (
+    <div className={`space-y-1.5 ${className}`}>
+      <Label>{label}</Label>
+      <Input
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </div>
   );
 }

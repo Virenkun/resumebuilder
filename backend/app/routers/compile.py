@@ -1,15 +1,17 @@
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from app.models.requests import CompileRequest
+from app.models.user import User
+from app.deps.auth import get_current_user
+from app.services import resume_storage, resume_artifacts
+from app.services.template_repository import get_template_repository
 from app.config import get_settings
-from jinja2 import Environment, FileSystemLoader
-import json
+from jinja2 import Environment, BaseLoader
 import os
 import subprocess
-import tempfile
 import shutil
+import tempfile
 import logging
-import re
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -20,7 +22,6 @@ def escape_latex(text: str) -> str:
     """Escape special LaTeX characters in text"""
     if not text:
         return ""
-    # Characters that need escaping in LaTeX
     chars = {
         "&": r"\&",
         "%": r"\%",
@@ -32,7 +33,6 @@ def escape_latex(text: str) -> str:
         "~": r"\textasciitilde{}",
         "^": r"\textasciicircum{}",
     }
-    # Don't escape backslashes that are already LaTeX commands
     escaped = text
     for char, replacement in chars.items():
         escaped = escaped.replace(char, replacement)
@@ -45,7 +45,7 @@ def prepare_template_data(resume_data: dict) -> dict:
 
     data = {
         "name": escape_latex(personal.get("name", "")),
-        "email": personal.get("email", ""),  # Don't escape emails (used in href)
+        "email": personal.get("email", ""),
         "phone": escape_latex(personal.get("phone", "")),
         "location": escape_latex(personal.get("location", "")),
         "linkedin": personal.get("linkedin", ""),
@@ -54,7 +54,6 @@ def prepare_template_data(resume_data: dict) -> dict:
         "summary": escape_latex(resume_data.get("summary", "") or ""),
     }
 
-    # Experience
     experience = []
     for exp in resume_data.get("experience", []):
         experience.append({
@@ -67,7 +66,6 @@ def prepare_template_data(resume_data: dict) -> dict:
         })
     data["experience"] = experience
 
-    # Education
     education = []
     for edu in resume_data.get("education", []):
         education.append({
@@ -80,7 +78,6 @@ def prepare_template_data(resume_data: dict) -> dict:
         })
     data["education"] = education
 
-    # Skills
     skills = resume_data.get("skills", {})
     data["skills"] = {
         "technical": [escape_latex(s) for s in skills.get("technical", [])],
@@ -88,11 +85,8 @@ def prepare_template_data(resume_data: dict) -> dict:
         "tools": [escape_latex(s) for s in skills.get("tools", [])],
         "languages": [escape_latex(s) for s in skills.get("languages", [])],
     }
-    data["has_skills"] = any(
-        len(v) > 0 for v in data["skills"].values()
-    )
+    data["has_skills"] = any(len(v) > 0 for v in data["skills"].values())
 
-    # Projects
     projects = []
     for proj in resume_data.get("projects", []):
         projects.append({
@@ -103,7 +97,6 @@ def prepare_template_data(resume_data: dict) -> dict:
         })
     data["projects"] = projects
 
-    # Certifications
     certifications = []
     for cert in resume_data.get("certifications", []):
         certifications.append({
@@ -117,72 +110,77 @@ def prepare_template_data(resume_data: dict) -> dict:
 
 
 def render_latex(template_name: str, data: dict) -> str:
-    """Render LaTeX template with Jinja2"""
-    templates_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        "templates",
-    )
+    """Render a Supabase-hosted LaTeX template with Jinja2."""
+    repo = get_template_repository()
+    tex_source = repo.get_tex(template_name)
 
     env = Environment(
-        loader=FileSystemLoader(os.path.join(templates_dir, template_name)),
+        loader=BaseLoader(),
         block_start_string="<%",
         block_end_string="%>",
         variable_start_string="<<",
         variable_end_string=">>",
         comment_start_string="<#",
         comment_end_string="#>",
+        autoescape=False,
     )
 
-    template = env.get_template("template.tex")
+    template = env.from_string(tex_source)
     return template.render(**data)
 
 
 @router.post("/compile")
-async def compile_resume(request: CompileRequest):
+async def compile_resume(
+    request: CompileRequest, user: User = Depends(get_current_user)
+):
     """Compile resume to PDF using LaTeX"""
     try:
-        # Load resume data
-        resume_file = os.path.join(
-            settings.storage_path, request.resume_id, "data.json"
-        )
-        if not os.path.exists(resume_file):
-            raise HTTPException(status_code=404, detail="Resume not found")
+        # Ownership-checked load
+        resume_data = resume_storage.load_resume_or_404(user.id, request.resume_id)
 
-        with open(resume_file, "r") as f:
-            resume_data = json.load(f)
-
-        # Prepare data and render template
         template_data = prepare_template_data(resume_data)
         latex_source = render_latex(request.template, template_data)
 
-        # Save LaTeX source
-        resume_dir = os.path.join(settings.storage_path, request.resume_id)
-        latex_file = os.path.join(resume_dir, "resume.tex")
-        with open(latex_file, "w") as f:
-            f.write(latex_source)
+        # LaTeX compilers need a real filesystem. Work in a tempdir, upload outputs.
+        with tempfile.TemporaryDirectory(prefix="latex-") as work_dir:
+            latex_file = os.path.join(work_dir, "resume.tex")
+            with open(latex_file, "w") as f:
+                f.write(latex_source)
 
-        # Compile LaTeX to PDF
-        pdf_file = os.path.join(resume_dir, "resume.pdf")
+            # Always persist the .tex source so users can download it even if
+            # compilation fails.
+            resume_artifacts.upload_artifact(
+                user.id,
+                request.resume_id,
+                "resume.tex",
+                latex_source.encode("utf-8"),
+                content_type="application/x-tex",
+            )
 
-        # Try xelatex first (for fontspec support), then tectonic, fall back to pdflatex
-        compiled = False
-        for compiler in ["xelatex", "tectonic", "pdflatex"]:
-            if shutil.which(compiler):
+            pdf_file = os.path.join(work_dir, "resume.pdf")
+
+            compiled = False
+            tried: list[str] = []
+            last_error: str | None = None
+            for compiler in ["xelatex", "tectonic", "pdflatex"]:
+                if not shutil.which(compiler):
+                    continue
+                tried.append(compiler)
                 try:
                     if compiler == "tectonic":
-                        cmd = ["tectonic", latex_file, "-o", resume_dir]
+                        cmd = ["tectonic", latex_file, "-o", work_dir]
                     elif compiler == "xelatex":
                         cmd = [
                             "xelatex",
                             "-interaction=nonstopmode",
-                            f"-output-directory={resume_dir}",
+                            f"-output-directory={work_dir}",
                             latex_file,
                         ]
                     else:
                         cmd = [
                             "pdflatex",
                             "-interaction=nonstopmode",
-                            f"-output-directory={resume_dir}",
+                            f"-output-directory={work_dir}",
                             latex_file,
                         ]
 
@@ -197,29 +195,47 @@ async def compile_resume(request: CompileRequest):
                         compiled = True
                         logger.info(f"Successfully compiled with {compiler}")
                         break
-                    else:
-                        logger.warning(
-                            f"{compiler} did not produce PDF. stderr: {result.stderr[:500]}"
-                        )
+
+                    last_error = (
+                        f"{compiler} exit={result.returncode}; "
+                        f"stderr: {result.stderr[-800:] or '<empty>'}; "
+                        f"stdout: {result.stdout[-400:] or '<empty>'}"
+                    )
+                    logger.warning(last_error)
                 except subprocess.TimeoutExpired:
-                    logger.warning(f"{compiler} timed out")
+                    last_error = f"{compiler} timed out after {settings.latex_compile_timeout}s"
+                    logger.warning(last_error)
                 except Exception as e:
-                    logger.warning(f"{compiler} failed: {e}")
+                    last_error = f"{compiler} failed: {e}"
+                    logger.warning(last_error)
 
-        if not compiled:
-            # Return the LaTeX source even if compilation fails
-            return {
-                "success": False,
-                "message": "LaTeX compilation failed. No LaTeX compiler (tectonic/pdflatex) available. You can download the .tex source and compile locally.",
-                "latex_available": True,
-                "download_url": f"/api/download/latex/{request.resume_id}",
-            }
+            if not compiled:
+                if not tried:
+                    msg = (
+                        "No LaTeX compiler found on PATH (tried xelatex, tectonic, "
+                        "pdflatex). Install one in the backend image."
+                    )
+                else:
+                    msg = (
+                        f"LaTeX compilation failed (tried: {', '.join(tried)}). "
+                        f"Last error: {last_error}"
+                    )
+                return {
+                    "success": False,
+                    "message": msg,
+                    "latex_available": True,
+                    "download_url": f"/api/download/latex/{request.resume_id}",
+                }
 
-        # Clean up auxiliary files
-        for ext in [".aux", ".log", ".out"]:
-            aux_file = os.path.join(resume_dir, f"resume{ext}")
-            if os.path.exists(aux_file):
-                os.remove(aux_file)
+            with open(pdf_file, "rb") as f:
+                pdf_bytes = f.read()
+            resume_artifacts.upload_artifact(
+                user.id,
+                request.resume_id,
+                "resume.pdf",
+                pdf_bytes,
+                content_type="application/pdf",
+            )
 
         return {
             "success": True,
@@ -236,30 +252,39 @@ async def compile_resume(request: CompileRequest):
 
 
 @router.get("/download/pdf/{resume_id}")
-async def download_pdf(resume_id: str):
+async def download_pdf(
+    resume_id: str, user: User = Depends(get_current_user)
+):
     """Download compiled PDF"""
-    pdf_path = os.path.join(settings.storage_path, resume_id, "resume.pdf")
+    # Ownership check
+    resume_storage.load_resume_or_404(user.id, resume_id)
 
-    if not os.path.exists(pdf_path):
+    pdf_bytes = resume_artifacts.download_artifact(user.id, resume_id, "resume.pdf")
+    if pdf_bytes is None:
         raise HTTPException(status_code=404, detail="PDF not found. Please compile first.")
 
-    return FileResponse(
-        pdf_path,
+    return Response(
+        content=pdf_bytes,
         media_type="application/pdf",
-        filename="resume.pdf",
+        headers={"Content-Disposition": 'inline; filename="resume.pdf"'},
     )
 
 
 @router.get("/download/latex/{resume_id}")
-async def download_latex(resume_id: str):
+async def download_latex(
+    resume_id: str, user: User = Depends(get_current_user)
+):
     """Download LaTeX source"""
-    tex_path = os.path.join(settings.storage_path, resume_id, "resume.tex")
+    resume_storage.load_resume_or_404(user.id, resume_id)
 
-    if not os.path.exists(tex_path):
-        raise HTTPException(status_code=404, detail="LaTeX source not found. Please compile first.")
+    tex_bytes = resume_artifacts.download_artifact(user.id, resume_id, "resume.tex")
+    if tex_bytes is None:
+        raise HTTPException(
+            status_code=404, detail="LaTeX source not found. Please compile first."
+        )
 
-    return FileResponse(
-        tex_path,
+    return Response(
+        content=tex_bytes,
         media_type="application/x-tex",
-        filename="resume.tex",
+        headers={"Content-Disposition": 'attachment; filename="resume.tex"'},
     )
