@@ -10,4 +10,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true,
+    allowedHosts: ["ec2-52-91-78-122.compute-1.amazonaws.com"],
+  },
+  preview: {
+    host: true,
+    allowedHosts: ["ec2-52-91-78-122.compute-1.amazonaws.com"],
+  },
 });
