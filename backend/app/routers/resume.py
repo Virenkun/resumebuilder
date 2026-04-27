@@ -15,6 +15,10 @@ async def list_resumes(user: User = Depends(get_current_user)):
     for data in resume_storage.iter_user_resumes(user.id):
         personal = data.get("personal") or {}
         metadata = data.get("metadata") or {}
+        experience = data.get("experience") or []
+        latest_position = (
+            (experience[0] or {}).get("position") if experience else None
+        )
         items.append(
             {
                 "id": data.get("id"),
@@ -22,6 +26,10 @@ async def list_resumes(user: User = Depends(get_current_user)):
                 "template": metadata.get("template", "jakes_resume"),
                 "last_modified": metadata.get("last_modified"),
                 "ats_score": metadata.get("ats_score"),
+                "summary": data.get("summary"),
+                "position": latest_position,
+                "has_target_jd": bool(metadata.get("target_jd")),
+                "experience_count": len(experience),
             }
         )
     return {"resumes": items}
